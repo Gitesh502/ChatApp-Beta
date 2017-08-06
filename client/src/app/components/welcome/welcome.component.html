@@ -1,0 +1,86 @@
+<div class="container-fluid mrgin-top-50">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="jumbotron">
+                <ngx-siema [options]="options">
+                    <ngx-siema-slide class="slider-display-block">
+                        <h2>Welcome to Chat App</h2><br />
+                        <p>Simple application , where you can chat with your friends</p>
+                    </ngx-siema-slide>
+                    <ngx-siema-slide class="slider-display-block">
+                        <h2>Create account for free</h2>
+                        <p>Single click of button creates your account, No fuss</p>
+                    </ngx-siema-slide>
+                    <ngx-siema-slide class="slider-display-block">
+                        <h2>Login in your account</h2>
+                        <p>Login where ever you want when ever you want and make new friedns</p>
+                    </ngx-siema-slide>
+                    <ngx-siema-slide class="slider-display-block">
+                        <h2>Start distrubing your friends :) </h2>
+                        <p>LOL :)</p>
+                    </ngx-siema-slide>
+                </ngx-siema>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label class="padding-bottom"><h2>Register Free</h2></label>
+            <form class="form-horizontal" [formGroup]="registerForm" (ngSubmit)="onRegisterSubmit(registerForm.value)">
+                <div class="form-group row" >
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" id="firstName"   placeholder="First name"  formControlName="firstName" required/>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" id="surName" name="surName" placeholder="Surname" formControlName="surName"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Email address" formControlName="email">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="New password" formControlName="password">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="padding-left-15"><h3>Birthday</h3></label>
+                    <div class="col-sm-12">
+                        <div class="col-sm-4 no-left-padding">
+                            <select class="form-control" id="birthday" formControlName="birthday">
+                           <option *ngFor="let day of days">
+                               {{day}}
+                           </option>
+                       </select>
+                        </div>
+                        <div class="col-sm-4 no-left-padding">
+                            <select class="form-control" id="birthmonth" formControlName="birthmonth">
+                           <option *ngFor="let month of months">
+                               {{month}}
+                           </option>
+                       </select>
+                        </div>
+                        <div class="col-sm-4 no-left-padding">
+                            <select class="form-control" id="birthyear" formControlName="birthyear">
+                            <option *ngFor="let year of years">
+                               {{year}}
+                           </option>
+                       </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        <label class="radio-inline"><input type="radio" name="gender" value="Male" formControlName="gender">Male</label>
+                        <label class="radio-inline"><input type="radio" name="gender" value="Female" formControlName="gender">Female</label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        <input type="submit" class="btn btn-success input-lg" value="Create Account" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
