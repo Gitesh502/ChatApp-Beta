@@ -1,8 +1,10 @@
-const jwt=require('jsonwebtoken');
-
+const jwt = require('jsonwebtoken');
+const _ = require('lodash');
 const accountService = require('../../services/account_service');
+const helperService = require('../../services/helper_service');
 const User = require('../../models/user_model');
 const config = require('../../config/config');
+var fs = require('fs');
 
 exports.register = function (req, res) {
     let newuser = new User({
@@ -27,7 +29,7 @@ exports.authenticate = function (req, res) {
     const userName = req.body.loginEmail;
     const password = req.body.loginPassword;
 
-    accountService.getUserByUserName(userName, (err, user) => {
+    accountService.login(userName, (err, user) => {
         if (err)
             throw err;
         if (!user)
@@ -39,6 +41,18 @@ exports.authenticate = function (req, res) {
                 const token = jwt.sign(user, config.secretkey, {
                     expiresIn: 604800 //1 week
                 });
+
+                //saving token and user id into collection 
+                try {
+                    helperService.assignTokenUserId(user._id, token, (err, newRec, numRowsAfftecd) => {
+                        if (err)
+                            console.log(err);
+
+                    });
+                }
+                catch (ex) {
+
+                }
                 res.json({
                     success: true,
                     token: "JWT " + token,
@@ -58,21 +72,32 @@ exports.authenticate = function (req, res) {
 }
 
 exports.profile = function (req, res) {
-    // accountService.getUserById(req.params.id, (err, user) => {
-    //     if (err)
-    //         res.json({ success: false, msg: "Failed to get User" });
-    //     else if (!user)
-    //         res.json({ success: false, msg: "No user found with this id", response: null });
-    //     else
-    //         res.json({ success: true, msg: "User Found", response: user });
-    // });
+    _.omit(req.user, 'password')
     res.json({ success: true, msg: "User Found", response: req.user });
 }
 
 exports.getAll = function (req, res) {
-    accountService.getAll((err, users) => {
+    accountService.getMany((err, users) => {
         if (err) throw err;
         else
             res.json({ success: true, msg: "test", response: users });
     });
 }
+
+exports.getById = function (req, res) {
+    accountService.getUserByEmail(req.params.id, (err, user) => {
+        if (err)
+            res.json({ success: false, msg: "Failed to get User", error: err });
+        else if (!user)
+            res.json({ success: false, msg: "No user found with this id", response: null });
+        else
+            res.json({ success: true, msg: "User Found", response: user });
+    });
+}
+
+
+exports.updateProfile=function(req,res){
+   // accountService.findAndUpdateUser(req.user._id,)
+}
+
+

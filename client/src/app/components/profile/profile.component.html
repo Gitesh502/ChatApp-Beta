@@ -1,3 +1,98 @@
-<div *ngIf="user">
-<h2 class="page-header">{{user.firstName}}</h2>
+<div class="container-fluid mrgin-top-50">
+    <modal #firstModal 
+    (onOpen)="imageModalOnOpen()"
+    >
+        <modal-header>
+            <h1>I am first modal</h1>
+        </modal-header>
+        <modal-content>
+           <dropzone [config]="config" [message]="'Click or drag images here to upload'" (error)="onUploadError($event)" (success)="onUploadSuccess($event)"></dropzone>
+
+        </modal-content>
+        <modal-footer>
+            <button class="btn btn-primary" (click)="firstModal.close()">okay!</button>
+        </modal-footer>
+    </modal>
+
+    <div class="row">
+        <div class="fb-profile">
+            <ng-template #noTimeLine>
+                <div class="chatAppTimeLineImage">
+                </div>
+            </ng-template>
+            <ng-template #noProfileImage>
+               <img align="left" (click)="firstModal.open()" class="fb-image-profile thumbnail" src="assets/images/no-picture.jpg" alt="Profile image example"
+            />
+            </ng-template>
+            <img *ngIf="user?.hasTimeLineImg;else noTimeLine;" align="left" class="fb-image-lg" src="http://lorempixel.com/850/280/nightlife/5/"
+                alt="" />
+            <!-- <img align="left" (click)="firstModal.open()" class="fb-image-profile thumbnail" src="assets/images/no-picture.jpg" alt="Profile image example"
+            /> -->
+            <img *ngIf="user?.profilePics?.length>0;else noProfileImage;" align="left" (click)="onProfileClick()" class="fb-image-profile thumbnail" src="assets/images/no-picture.jpg" alt="Profile image example"
+            />
+            <div class="fb-profile-text">
+                <h1>{{user?.firstName}} {{user?.surName}}</h1>
+            </div>
+
+            <div class="divPostBox">
+                <textarea class="form-control userPostBox" rows="5" [(ngModel)]="userPost.PostDescription"></textarea>
+                <div class="postToolBar">
+                    <button (click)="onSubmit($event)" class="btn btn-default postToolBar-btn" [ngClass]="{
+      'btn--idle': formFirstSubmit,
+      'btn--processing': formProcessing
+    }"><div class="btn__text">Submit</div></button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="container">
+
+        <div class="col-sm-10 no-left-padding">
+            <ngb-tabset #t="ngbTabset">
+                <ngb-tab id="tab-selectbyid1">
+                    <ng-template ngbTabTitle class="active"><b>Timeline</b></ng-template>
+                    <ng-template ngbTabContent>
+                        <div class="row example-basic">
+                            <div class="col-xs-10 col-xs-offset-1 col-sm-10">
+                                <ul class="timeline">
+                                    <ng-container *ngFor="let post of postsList">
+                                        <li class="timeline-item period">
+                                            <div class="timeline-info"></div>
+                                            <div class="timeline-marker"></div>
+                                            <div class="timeline-content">
+                                                <h2 class="timeline-title">{{post.key | amParse:'DD/MM/YYYY' | amDateFormat:'MMMM YYYY'}}</h2>
+                                            </div>
+                                        </li>
+                                        <li class="timeline-item">
+                                            <div class="timeline-info">
+                                                <span>{{post.key | amParse:'DD/MM/YYYY'  | amDateFormat:'LL'}}</span>
+
+                                            </div>
+                                            <div class="timeline-marker"></div>
+                                            <div class="timeline-content" *ngFor="let p of post.value">
+                                                <h4 class="timeline-title tt-timeline">{{user?.firstName}} {{user?.surName}} <span class="pull-right timeAgo"><i class="fa fa-clock-o" aria-hidden="true"></i>  {{p.PostedOn | amTimeAgo:true}}</span></h4>
+
+                                                <p class="post-desc">{{p.PostDescription}}</p>
+                                            </div>
+                                        </li>
+
+                                    </ng-container>
+                                </ul>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngb-tab>
+                <ngb-tab id="tab-selectbyid2" class="tabbable-panel">
+                    <ng-template ngbTabTitle><b>About</b></ng-template>
+                    <ng-template ngbTabContent>
+                        <p></p>
+                    </ng-template>
+                </ngb-tab>
+            </ngb-tabset>
+        </div>
+    </div>
+
+
 </div>

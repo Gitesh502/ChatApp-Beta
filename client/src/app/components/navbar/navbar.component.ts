@@ -5,6 +5,7 @@ import { AppService } from '../../app.services';
 import { LoginModel } from '../../models/loginModel';
 import { AccountService } from '../../services/account.service';
 import { HelperService } from '../../services/helper.service';
+import { SharedService } from '../../services/shared.service';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -18,7 +19,8 @@ export class NavbarComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private accountService: AccountService,
-    private helper:HelperService,
+    private helper: HelperService,
+    private shared:SharedService,
     appRouteService: AppService
   ) {
     this.menuItems = new Array();
@@ -32,10 +34,6 @@ export class NavbarComponent implements OnInit {
     {
       menuName: "Dashboard",
       urlName: "Dashboard"
-    },
-    {
-      menuName: "Profile",
-      urlName: "Profile"
     }];
     this.buildForm();
   }
@@ -84,9 +82,9 @@ export class NavbarComponent implements OnInit {
       this.accountService.login(this.loginForm.value)
         .subscribe(
         data => {
-          console.log(data)
-          this.accountService.storeUserData(data.token, data.response);
+          this.shared.storeUserData(data.token, data.response);
           if (data.success) {
+            this.shared.loadToken();
             this.router.navigate(['./Home']);
           }
         },

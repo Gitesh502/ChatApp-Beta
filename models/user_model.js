@@ -17,7 +17,8 @@ const userSchema=mongoose.Schema({
     },
     password:{
         type:String,
-        require:true
+        require:true,
+        select: false
     },
     birthday:{
         type:Number,
@@ -34,7 +35,9 @@ const userSchema=mongoose.Schema({
     gender:{
         type:String,
         require:true
-    }
+    },
+    posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Posts' }],
+    images:[{type: mongoose.Schema.Types.ObjectId, ref: 'UserImages'}]
 
 });
 

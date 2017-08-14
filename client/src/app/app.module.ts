@@ -19,11 +19,33 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AppRoutes } from './app.routes';
 
 import { AppService } from './app.services';
-import {AccountService } from './services/account.service';
-import {HelperService } from './services/helper.service';
+import { AccountService } from './services/account.service';
+import { HelperService } from './services/helper.service';
+import { SharedService } from './services/shared.service';
+import { ProfileService } from './services/profile/profile.service';
 
-import {AuthGuard} from './guards/auth.guard';
+import { AuthGuard } from './guards/auth.guard';
+import { SharedComponent } from './components/shared/shared.component';
 
+import { APP_CONFIG, AppConfig } from './app.config';
+
+import { MomentModule } from 'angular2-moment';
+import { GroupByPipe } from './pipes/group-by-pipe.pipe';
+import {TimeAgoPipe} from 'time-ago-pipe';
+
+import {ModalModule} from "ng2-modal";
+
+import { DropzoneModule } from 'angular2-dropzone-wrapper';
+import { DropzoneConfigInterface } from 'angular2-dropzone-wrapper';
+import { LightboxModule } from 'angular2-lightbox';
+
+
+const DROPZONE_CONFIG: DropzoneConfigInterface = {
+  // Change this to your upload POST address: 
+  server: 'http://localhost:3000/users/upload',
+  maxFilesize: 50,
+  acceptedFiles: 'image/*',
+};
 
 @NgModule({
   declarations: [
@@ -35,17 +57,33 @@ import {AuthGuard} from './guards/auth.guard';
     WelcomeComponent,
     RegisterComponent,
     DashboardComponent,
+    SharedComponent,
+    GroupByPipe,
+    TimeAgoPipe,
   ],
   imports: [
     HttpModule,
+    LightboxModule,
     FormsModule,
     BrowserModule,
+    ModalModule,
+    MomentModule,
     ReactiveFormsModule,
     NgbModule.forRoot(),
     NgxSiemaModule.forRoot(),
     RouterModule.forRoot(AppRoutes),
+    DropzoneModule.forRoot(DROPZONE_CONFIG)
   ],
-  providers: [AppService,AccountService,HelperService,AuthGuard],
+  providers: [
+    AppService
+    , AccountService
+    , HelperService
+    , AuthGuard
+    , SharedService
+    ,ProfileService
+  , { provide: APP_CONFIG, useValue: AppConfig }
+  ,GroupByPipe
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

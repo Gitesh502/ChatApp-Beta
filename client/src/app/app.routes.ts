@@ -5,14 +5,15 @@ import { WelcomeComponent } from './components/welcome/welcome.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import {AuthGuard} from './guards/auth.guard';
 export const AppRoutes: Routes = [
+  { path: '', component: HomeComponent ,canActivate:[AuthGuard] },
   { path: 'Home', component: HomeComponent ,canActivate:[AuthGuard] },
   { path: 'Welcome', component: WelcomeComponent },
   { path: 'Profile', component: ProfileComponent,canActivate:[AuthGuard] },
   { path: 'Dashboard', component: DashboardComponent,canActivate:[AuthGuard] },
-  {
-    path: '',
-    redirectTo: '/Welcome',
-    pathMatch: 'full'
-  },
   { path: '**', component: WelcomeComponent }
+  // {
+  //   path: '',
+  //   redirectTo: '/Home',
+  //   pathMatch: 'full'
+  // },
 ];
