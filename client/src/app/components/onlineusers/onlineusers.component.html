@@ -1,0 +1,26 @@
+<nav class="navbar navbar-default  sidebar ol-user-list" role="navigation">
+
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-sidebar-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+  </div>
+  <div class="collapse navbar-collapse">
+    <ul class="nav navbar-nav">
+      <li *ngFor="let user of OnlineUsers">
+        <a (click)="openChat(user)" class="ol-user">
+            <i class="pull-left  fa fa-user"></i>
+           <div class="ol-user-name"> {{user?.firstName}} {{user?.surName}}</div>
+           <div *ngIf="user?.isOnline" class="online-div pull-right">
+              <span class="online"></span>
+           </div>
+           
+          </a>
+      </li>
+    </ul>
+  </div>
+
+</nav>

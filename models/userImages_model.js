@@ -6,7 +6,19 @@ const userImagesSchema=mongoose.Schema({
         type:String,
         require:true
     },
+    fileName:{
+        type:String,
+        require:true
+    },
+    iconName:{
+        type:String
+        
+    },
     imagePath:{
+        type:String,
+        require:true
+    },
+    fullPath:{
         type:String,
         require:true
     },
@@ -23,7 +35,7 @@ const userImagesSchema=mongoose.Schema({
         require:true
     },
     imageType:{
-        type:'Number',  //1=profileimg,2=timelineimages,3=timelineimage
+        type:'Number',  //1=profileimg,2=bannerimages,3=timelineimage
         require:true
     }
 

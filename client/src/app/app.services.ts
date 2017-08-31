@@ -4,7 +4,6 @@ import { RouterModule, Routes,Router } from '@angular/router';
 export class AppService {
 
   constructor(public  router:Router) { 
-    console.log(router.url)
   }
   getUrl()
   {

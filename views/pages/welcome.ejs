@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include ../partials/head %>
+</head>
+
+<body class="container-fluid">
+    <header>
+        <% include ../partials/header %>
+    </header>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="jumbotron">
+
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label class="padding-bottom"><h2>Register Free</h2></label>
+            <form name="registrationForm" id="registrationForm" class="form-horizontal" action="/register" method="POST">
+                <div class="form-group row">
+                    <div class="col-sm-6">
+                        <input type="text"  class="form-control <%= errors!=null && errors.indexOf("firstName") ? borderRed : '' %>" id="firstName" name="firstName" placeholder="First name" />
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control <%= errors!=null && errors.indexOf("surName") ? borderRed : '' %>" id="surName" name="surName" placeholder="Surname"  />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        <input type="email" class="form-control <%= errors!=null && errors.indexOf("email") ? borderRed : '' %>" id="email" name="email" placeholder="Email address" >
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        <input type="password" class="form-control <%= errors!=null && errors.indexOf("password") ? borderRed : '' %>" id="password" name="password" placeholder="New password" >
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="padding-left-15"><h3>Birthday</h3></label>
+                    <div class="col-sm-12">
+                        <div class="col-sm-4 no-left-padding">
+                            <select class="form-control" id="birthday">
+                          <% for(var day=1;day<=31;day++) {%>
+    <option value='<%= day %>'><%= day %></option>
+<% } %>
+                       </select>
+                        </div>
+                        <div class="col-sm-4 no-left-padding">
+                            <select class="form-control" id="birthmonth">
+                            
+                           <% daymonths.forEach(function(month) { %>
+                             <option value="<%=month.Value %>"><%= month.Name %></option>
+                            <% }); %>
+                       </select>
+                        </div>
+                        <div class="col-sm-4 no-left-padding">
+                            <select class="form-control" id="birthyear">
+                            <% for(var year=1990;year<=2017;year++) {%>
+    <option value='<%= year %>'><%= year %></option>
+<% } %>
+                       </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        <label class="radio-inline"><input type="radio" name="gender" checked value="Male">Male</label>
+                        <label class="radio-inline"><input type="radio" name="gender" value="Female" >Female</label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        <input type="submit"   class="btn btn-success input-lg" value="Create Account" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

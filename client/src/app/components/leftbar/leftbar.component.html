@@ -1,0 +1,33 @@
+<nav class="navbar navbar-default sidebar left-bar" role="navigation">
+  <div class="container-fluid">
+     <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-sidebar-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        </button>      
+     </div>
+     <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
+        <ul class="nav navbar-nav left-bar-list">
+           <li>
+              <a class="left-bar-item profile">
+                 <ng-template #noProfileImage>
+                    <span>
+                    <img  class="home-noProfileImage img-circle" alt="" src="assets/images/no-picture.jpg">
+                    </span>
+                 </ng-template>
+                 <img [src]="profilePicPath" class="profile-image img-circle" *ngIf="sharedService.getLocalProfile().profileImages?.length>0;else noProfileImage;"
+                 />
+                 <div class="left-bar-itemname">  {{sharedService.getLocalProfile().firstName}} {{sharedService.getLocalProfile().surName}}</div>
+              </a>
+           </li>
+           <li>
+            <a class="left-bar-item" routerLink="/Messenger" routerLinkActive="active" >
+               <div class="left-bar-itemname">Messages</div>
+            </a>
+         </li>
+        </ul>
+     </div>
+  </div>
+</nav>

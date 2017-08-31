@@ -1,21 +1,21 @@
 const Post = require('../models/posts_model');
 const Dao = require('../dao/dao');
+var dao = new Dao(Post);
 
-var dao=new Dao(Post);
 
-module.exports.submitPost=function(newpost,callback)
-{
-   newpost.save(callback);
+
+
+module.exports.save = function (newpost, callback) {
+	dao.save(newpost,callback);
 }
-
-module.exports.getAllPosts=function(callback)
-{
-    dao.getMany(callback);
+module.exports.get = function (filter, populateQuery,sortOptions, callback) {
+	dao.find(filter, populateQuery,sortOptions, callback);
 }
-
-module.exports.getPostByPostedBy=function(id,callback)
+module.exports.deletePost=function(filter, options, callback)
 {
-    Post.find({PostedBy:id})
-    .populate("PostedBy")
-    .exec(callback)
+	dao.findOneAndRemove(filter, options, callback);
+	// Post.findOne({
+	// 	PostedBy:userId,
+	// 	_id:postId
+	// }).remove().exec(callback);
 }

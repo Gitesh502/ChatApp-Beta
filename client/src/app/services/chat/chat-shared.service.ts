@@ -1,0 +1,38 @@
+import { Injectable } from '@angular/core';
+import { chatBoxModel, MessagesModel } from '../../models/chatboxModel';
+
+
+@Injectable()
+export class ChatSharedService {
+
+  /**
+ * Messages variable is to store all messages of particular converstation and display when chat boxs is opened
+ * Used in getMessages function below
+ */
+  public Messages: MessagesModel;
+  public currentMsgCount: number = 0;
+  public showMsgNotification:boolean=false;
+  public newMsgCount:number=0;
+
+  constructor() {
+    this.Messages = new MessagesModel();
+    if (localStorage.getItem("mc") != "" && localStorage.getItem("mc") != null) {
+      this.currentMsgCount = parseInt(localStorage.getItem("mc"));
+    }
+  }
+  initMessages(data) {
+    this.Messages = data;
+    this.currentMsgCount=this.Messages.conversation.length;
+  }
+  getMessages() {
+    return this.Messages;
+  }
+  pushMessage(message) {
+    this.Messages.conversation.push(message);
+  }
+  newMsgReceived()
+  {
+    this.showMsgNotification=true;
+    this.newMsgCount=this.newMsgCount+1;
+  }
+}

@@ -1,98 +1,223 @@
 <div class="container-fluid mrgin-top-50">
-    <modal #firstModal 
-    (onOpen)="imageModalOnOpen()"
-    >
-        <modal-header>
-            <h1>I am first modal</h1>
-        </modal-header>
-        <modal-content>
-           <dropzone [config]="config" [message]="'Click or drag images here to upload'" (error)="onUploadError($event)" (success)="onUploadSuccess($event)"></dropzone>
-
-        </modal-content>
-        <modal-footer>
-            <button class="btn btn-primary" (click)="firstModal.close()">okay!</button>
-        </modal-footer>
-    </modal>
-
-    <div class="row">
-        <div class="fb-profile">
-            <ng-template #noTimeLine>
-                <div class="chatAppTimeLineImage">
-                </div>
-            </ng-template>
-            <ng-template #noProfileImage>
-               <img align="left" (click)="firstModal.open()" class="fb-image-profile thumbnail" src="assets/images/no-picture.jpg" alt="Profile image example"
-            />
-            </ng-template>
-            <img *ngIf="user?.hasTimeLineImg;else noTimeLine;" align="left" class="fb-image-lg" src="http://lorempixel.com/850/280/nightlife/5/"
-                alt="" />
-            <!-- <img align="left" (click)="firstModal.open()" class="fb-image-profile thumbnail" src="assets/images/no-picture.jpg" alt="Profile image example"
-            /> -->
-            <img *ngIf="user?.profilePics?.length>0;else noProfileImage;" align="left" (click)="onProfileClick()" class="fb-image-profile thumbnail" src="assets/images/no-picture.jpg" alt="Profile image example"
-            />
-            <div class="fb-profile-text">
-                <h1>{{user?.firstName}} {{user?.surName}}</h1>
-            </div>
-
-            <div class="divPostBox">
-                <textarea class="form-control userPostBox" rows="5" [(ngModel)]="userPost.PostDescription"></textarea>
-                <div class="postToolBar">
-                    <button (click)="onSubmit($event)" class="btn btn-default postToolBar-btn" [ngClass]="{
-      'btn--idle': formFirstSubmit,
-      'btn--processing': formProcessing
-    }"><div class="btn__text">Submit</div></button>
-
-                </div>
-
-            </div>
+  <modal id="profilePicUpload">
+    <div class="modal">
+      <div class="modal-body">
+        <div class="modal-header">
+          <div>Update Profile Picture <a class="pull-right" (click)="closeModal('profilePicUpload');"><span>X</span></a></div>
         </div>
+        <div class="content">
+          <div class="upload-popup">
+            <div class="popup-container">
+              <div class="uploads" *ngIf="files?.length">
+                <div class="upload-item" *ngFor="let f of files; let i = index;">
+                  <div class="upload-item-top">
+                    <span class="filename">{{ f.name }}</span>
+                    <span class="progress-data">
+                                  {{ f.progress.data.percentage }}% at {{ f.progress.data.speedHuman }} eta {{ f.progress.data.eta }}s
+                                </span>
+                    <span class="x" (click)="removeFile(f.id)">x</span>
+                  </div>
+                  <div class="progress-bar-container">
+                    <div class="bar" [style.width]="f.progress.data.percentage + '%'" [class.green]="f.progress.data.percentage === 100"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="fileUpload">
+                <div class="drop-container" ngFileDrop (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput" [ngClass]="{ 'is-drop-over': dragOver }">
+                  <h1>Drag & Drop</h1>
+                  <p>
+                    <span>your files here or</span>
+                    <label class="upload-button">
+                            <input type="file" ngFileSelect (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
+                            browse
+                          </label>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+    <div class="modal-background"></div>
+  </modal>
+  <modal id="coverPicUpload">
+    <div class="modal">
+      <div class="modal-body">
+        <div class="modal-header">
+          <div>Update Cover Picture <a class="pull-right" (click)="closeModal('coverPicUpload');"><span>X</span></a></div>
+        </div>
+        <div class="content">
+          <div class="upload-popup">
+            <div class="popup-container">
+              <div class="uploads" *ngIf="files?.length">
+                <div class="upload-item" *ngFor="let f of files; let i = index;">
+                  <div class="upload-item-top">
+                    <span class="filename">{{ f.name }}</span>
+                    <span class="progress-data">
+                                      {{ f.progress.data.percentage }}% at {{ f.progress.data.speedHuman }} eta {{ f.progress.data.eta }}s
+                                    </span>
+                    <span class="x" (click)="removeFile(f.id)">x</span>
+                  </div>
+                  <div class="progress-bar-container">
+                    <div class="bar" [style.width]="f.progress.data.percentage + '%'" [class.green]="f.progress.data.percentage === 100"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="fileUpload">
+                <div class="drop-container" ngFileDrop (uploadOutput)="onUploadOutput($event,'cover')" [uploadInput]="uploadInput" [ngClass]="{ 'is-drop-over': dragOver }">
+                  <h1>Drag & Drop</h1>
+                  <p>
+                    <span>your files here or</span>
+                    <label class="upload-button">
+                                <input type="file" ngFileSelect (uploadOutput)="onUploadOutput($event,'cover')" [uploadInput]="uploadInput">
+                                browse
+                              </label>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-background"></div>
+  </modal>
+  <div class="col-md-4">
+    <ul id="accordion" class="accordion">
+      <li>
+        <div class="col col_4 iprofile-pic">
+          <ng-template #noProfileImage>
+            <img (click)="firstModal.open()" class="img-responsive profile-image" alt="" src="assets/images/no-picture.jpg">
+          </ng-template>
+          <img [src]="profilePicPath" class="img-responsive profile-image" *ngIf="user?.profileImages?.length>0;else noProfileImage;"
+          />
+          <div class="edit-profilepic">
+            <a class="btn-o upload-image-btn" (click)="openModal('profilePicUpload')"><i class="fa fa-camera"></i> Update Profile Picture</a>
+          </div>
+          <div class="edit-pic">
+            <a href="#" target="_blank" class="fa fa-facebook"></a>
+            <a class="fa fa-instagram"></a>
+            <a href="#" target="_blank" class="fa fa-twitter"></a>
+            <a href="#" target="_blank" class="fa fa-google"></a>
+          </div>
+          <div class="username">
+            <h2>{{user?.firstName}} {{user?.surName}} <small><i class="fa fa-map-marker"></i> India (Punjab)</small></h2>
+            <p>&nbsp;</p>
+            <a href="#" target="_blank" class="btn-o"> <i class="fa fa-user-plus"></i> Add Friend </a>
+            <a href="#" target="_blank" class="btn-o"> <i class="fa fa-plus"></i> Follow </a>
+            <ul class="nav navbar-nav">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-ellipsis-v pull-right"></span></a>
+                <ul class="dropdown-menu pull-right">
+                  <li><a href="#">Video Call <i class="fa fa-video-camera"></i></a></li>
+                  <li><a href="#">Poke <i class="fa fa-hand-o-right"></i></a></li>
+                  <li><a href="#">Report <i class="fa fa-bug"></i></a></li>
+                  <li><a href="#">Block <i class="fa fa-lock"></i></a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="link">
+          <i class="fa fa-globe"></i> About <i class="fa fa-chevron-down"></i>
+          <a (click)="loadAbout($event)" class="fa fa-plus pull-right"> Add info about you </a>
+        </div>
+        <ul class="submenu">
+          <li><a href="#"><i class="fa fa-calendar left-none"></i> Date of Birth : 03/09/1994</a></li>
+          <li><a href="#">Address : INDIA,Punjab</a></li>
+          <li><a href="mailto:gurdeepjawaddi94@gmail.com">Email : gurdeepjawaddi94@gmail.com</a></li>
+          <li><a href="#">Phone : +91 85680-79956</a></li>
+        </ul>
+      </li>
+      <li class="default open">
+        <div class="link"><i class="fa fa-code"></i> Professional Skills <i class="fa fa-chevron-down"></i></div>
+        <ul class="submenu">
+          <li>
+            <a href="#">
+                   <span class="tags">Adobe Photoshop</span>
+                   <span class="tags">Corel Draw</span> 
+                   <span class="tags">CSS</span> 
+                   <span class="tags">Css 3</span> 
+                   <span class="tags">Graphic Design</span> 
+                   <span class="tags">HTML</span>
+                   <span class="tags">HTML5</span>
+                   <span class="tags">JavaScript</span> 
+                   <span class="tags">Twitter bootstrap</span>
+                   <span class="tags">bootstrap</span> 
+                   <span class="tags">User Interface Design</span> 
+                   <span class="tags">Wordpress</span>
+                   </a>
+          </li>
+        </ul>
+        <li>
+          <div class="link"><i class="fa fa-picture-o"></i> Photos <small>1,120</small> <i class="fa fa-chevron-down"></i></div>
+          <ul class="submenu">
+            <li class="li-accordian"><a href="#"><img class="img-responsive profile-image" alt="profile-image" src="http://www.webncc.in/images/gurdeeposahan.jpg">                 
+                   </a>
+              <a href="#"><img class="img-responsive profile-image" alt="profile-image" src="http://www.webncc.in/images/gurdeeposahan.jpg">                 
+                   </a>
+              <a href="#"><img class="img-responsive profile-image" alt="profile-image" src="http://www.webncc.in/images/gurdeeposahan.jpg">                 
+                   </a>
+              <a href="#"><img class="img-responsive profile-image" alt="profile-image" src="http://www.webncc.in/images/gurdeeposahan.jpg">                 
+                   </a>
+              <a class="view-all" href="https://web.facebook.com/iamgurdeeposahan" target="_blank">15+
+                   </a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <div class="link"><i class="fa fa-users"></i> Friends <small>1,053</small> <i class="fa fa-chevron-down"></i></div>
+          <ul class="submenu">
+            <li class="li-accordian"><a href="#"><img class="img-responsive profile-image" alt="profile-image" src="http://www.webncc.in/images/gurdeeposahan.jpg">                 
+                   </a>
+              <a href="#"><img class="img-responsive profile-image" alt="profile-image" src="http://www.webncc.in/images/gurdeeposahan.jpg">                 
+                   </a>
+              <a href="#"><img class="img-responsive profile-image" alt="profile-image" src="http://www.webncc.in/images/gurdeeposahan.jpg">                 
+                   </a>
+              <a href="#"><img class="img-responsive profile-image" alt="profile-image" src="http://www.webncc.in/images/gurdeeposahan.jpg">                 
+                   </a>
+              <a href="#"><img class="img-responsive profile-image" alt="profile-image" src="http://www.webncc.in/images/gurdeeposahan.jpg">                 
+                   </a>
+              <a href="#"><img class="img-responsive profile-image" alt="profile-image" src="http://www.webncc.in/images/gurdeeposahan.jpg">                 
+                   </a>
+              <a href="#"><img class="img-responsive profile-image" alt="profile-image" src="http://www.webncc.in/images/gurdeeposahan.jpg">                 
+                   </a>
+              <a href="#"><img class="img-responsive profile-image" alt="profile-image" src="http://www.webncc.in/images/gurdeeposahan.jpg">                 
+                   </a>
+              <a href="#"><img class="img-responsive profile-image" alt="profile-image" src="http://www.webncc.in/images/gurdeeposahan.jpg">                 
+                   </a>
+              <a class="view-all" href="https://web.facebook.com/iamgurdeeposahan" target="_blank">50+
+                   </a>
+            </li>
+          </ul>
+        </li>
+    </ul>
+  </div>
+  <div class="col-md-8">
+    <div class="container" style="height:300;">
+      <ng-template #noCoverImage>
+        <div class="noCover">&nbsp;</div>
+      </ng-template>
+      <img *ngIf="user?.coverImages?.length>0;else noCoverImage;" src="{{coverPicPath}}" class="panel-footer" />
+      <div class="changecover-button padding-left-25">
+        <a class="btn-o upload-image-btn" (click)="openModal('coverPicUpload')"><i class="fa fa-camera" aria-hidden="true"></i> Change Cover</a>        </div>
+
+    </div>
+    <br>
     <div class="container">
-
-        <div class="col-sm-10 no-left-padding">
-            <ngb-tabset #t="ngbTabset">
-                <ngb-tab id="tab-selectbyid1">
-                    <ng-template ngbTabTitle class="active"><b>Timeline</b></ng-template>
-                    <ng-template ngbTabContent>
-                        <div class="row example-basic">
-                            <div class="col-xs-10 col-xs-offset-1 col-sm-10">
-                                <ul class="timeline">
-                                    <ng-container *ngFor="let post of postsList">
-                                        <li class="timeline-item period">
-                                            <div class="timeline-info"></div>
-                                            <div class="timeline-marker"></div>
-                                            <div class="timeline-content">
-                                                <h2 class="timeline-title">{{post.key | amParse:'DD/MM/YYYY' | amDateFormat:'MMMM YYYY'}}</h2>
-                                            </div>
-                                        </li>
-                                        <li class="timeline-item">
-                                            <div class="timeline-info">
-                                                <span>{{post.key | amParse:'DD/MM/YYYY'  | amDateFormat:'LL'}}</span>
-
-                                            </div>
-                                            <div class="timeline-marker"></div>
-                                            <div class="timeline-content" *ngFor="let p of post.value">
-                                                <h4 class="timeline-title tt-timeline">{{user?.firstName}} {{user?.surName}} <span class="pull-right timeAgo"><i class="fa fa-clock-o" aria-hidden="true"></i>  {{p.PostedOn | amTimeAgo:true}}</span></h4>
-
-                                                <p class="post-desc">{{p.PostDescription}}</p>
-                                            </div>
-                                        </li>
-
-                                    </ng-container>
-                                </ul>
-                            </div>
-                        </div>
-                    </ng-template>
-                </ngb-tab>
-                <ngb-tab id="tab-selectbyid2" class="tabbable-panel">
-                    <ng-template ngbTabTitle><b>About</b></ng-template>
-                    <ng-template ngbTabContent>
-                        <p></p>
-                    </ng-template>
-                </ngb-tab>
-            </ngb-tabset>
-        </div>
+      <div class="panel-footer">
+        <ol class="breadcrumb">
+          <li><a (click)="loadTimeline($event)"> Timeline </a></li>
+          <li><a (click)="loadAbout($event)">About</a></li>
+          <li><a>Friends</a></li>
+          <li><a>Photos</a></li>
+        </ol>
+      </div>
     </div>
-
-
+    <br>
+    <ng-template appProfile></ng-template>
+  </div>
 </div>

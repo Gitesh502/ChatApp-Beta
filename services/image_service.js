@@ -8,6 +8,11 @@ var dao=new Dao(UserImages);
 
 module.exports.saveImages=function(imgObj,callback)
 {
-    imgObj.save(callback);
+    dao.save(imgObj,callback);
+}
+
+module.exports.updateImages=function(filter,imgObj,options,callback)
+{
+    dao.update(filter,imgObj,options,callback);
 }
 

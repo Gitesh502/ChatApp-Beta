@@ -1,0 +1,9 @@
+.chatBoxes{
+    -webkit-column-count:3;
+    column-count: 3;
+    -webkit-column-gap: 10px;
+    column-gap: 10px;
+}
+.home-timeline{
+    margin-left: 14%;
+}

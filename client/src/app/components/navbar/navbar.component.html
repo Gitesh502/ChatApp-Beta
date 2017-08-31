@@ -1,5 +1,3 @@
-
-
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -29,8 +27,18 @@
         <li *ngFor="let item of menuItems">
           <a routerLink="/{{item.urlName}}" routerLinkActive="active">{{item.menuName}}</a>
         </li>
+        <li>
+          <a *ngIf="chatShared.showMsgNotification" class="fa-stack  has-badge" attr.data-count="{{chatShared.newMsgCount}}">
+            <i class="fa fa-envelope" aria-hidden="true"></i>
+          </a>
+        </li>
+        <li>
+            <a class="fa-stack  has-badge" data-count="0">
+              <i class="fa fa-bell" aria-hidden="true"></i>
+            </a>
+        </li>
       </ul>
-       <ul class="nav navbar-nav navbar-right">
+      <ul class="nav navbar-nav navbar-right">
         <li *ngIf="helper.loggedIn()">
           <a href="#" (click)="onLogoutClick()">Logout</a>
         </li>
@@ -44,7 +52,7 @@
         </div>
         <button type="submit" class="btn btn-default">Log In</button>
       </form>
-     
+
     </div>
   </div>
 </nav>

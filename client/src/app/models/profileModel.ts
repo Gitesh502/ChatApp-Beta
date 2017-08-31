@@ -21,4 +21,15 @@ export class UserModel
     public birthmonth:Number;
     public birthyear:Number;
     public gender:String;
+    public profileImages:Array<profileImageModel>
+}
+
+export class profileImageModel
+{
+    public fileName:string;
+    public iconName:string;
+    public fullPath:String;
+    public imagePath:String;
+    public imagetitle:String;
+
 }

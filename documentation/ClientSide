@@ -1,0 +1,70 @@
+Project structure
+
+Client
+|-
+|-src
+|  |-app
+|  |-assets
+|  |-environments
+|  |-favicon.ico
+   |-inde.html
+   |-main.ts
+   |-polyfills.ts
+   |-styles.css
+   |-tsconfig.app.json
+   |-tsconfig.spec.json
+   |-typings.d.ts
+|
+|-angular-cli.json--------------> Used for running  angular cli commands
+|-karma.conf.js-----------------> Testing purpose for running tests
+|-package.json------------------> Core of npm, specifies what packages are |							installed
+|-protractor.conf.js------------> For e2e testing
+|-tsconfig.json-----------------> It contains compiler options
+|-tslint.json-------------------> Specifies rules for typescript code
+
+
+
+1. tslint.json
+==================================
+a. TSLint is a static code analysis tool used in software development for checking Typescript code quality ,its checkes  if TypeScript source code complies with coding rules
+
+b. It checks the readability,maintainability and functionality errors of typescript code 
+
+c. In this project codelyzer rule set is used  for more info check https://github.com/mgechev/codelyzer
+
+d. Codelyzer is a set of tslint rules for static code analysis of Angular TypeScript projects
+
+
+
+2. tsconfig.json
+=======================================
+a.The presence of a tsconfig.json file in a directory indicates that the directory is the root of a TypeScript project. The tsconfig.json file specifies the root files and the compiler options required to compile the project.
+
+b. For more info https://www.typescriptlang.org/docs/handbook/tsconfig-json.html
+
+
+
+3.package.json
+======================================
+1. When ever node,npm is used , basic files which is created is package.json
+
+2. Used to install third party packages(plugins) through command propmt
+
+
+
+3.angular-cli.json
+=======================================
+a. Used for running  angular cli commands 
+
+b. Consists projects settings, build directory path, root directory path , e2e testing configuration settings et.. 
+
+
+
+4.
+
+  
+  
+
+
+
+

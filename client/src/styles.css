@@ -3,13 +3,16 @@
 @import "../node_modules/bootstrap/dist/css/bootstrap-theme.css";
 @import "../node_modules/font-awesome/css/font-awesome.css";
 @import "../node_modules/angular2-lightbox/lightbox.css";
+@import  'http://www.w3schools.com/lib/w3.css';
+@import "../src/assets/css/modal.css";
 
 body {
     background-color: #eee;
     overflow-x: hidden;
+    overflow-y: hidden;
 }
 .mrgin-top-50{
-    margin-top: 50px;
+    margin-top: 50px !important;
 }
 .mrgin-top-100{
     margin-top: 100px;
@@ -77,6 +80,10 @@ body {
     padding-top: 15px;
 }
 
+.padding-left-25{
+    padding-left: 25px !important;
+}
+
 .padding-bottom-15{
     padding-bottom: 15px;
 }
@@ -87,7 +94,7 @@ body {
 }
 
 .padding-15{
-    padding:15p !important;
+    padding:15px !important;
 }
 
 .padding-30{
@@ -112,4 +119,54 @@ body {
 .well{
 background-image: linear-gradient(to bottom, #ffffff 0%, #ffffff 100%) !important;
 }
+.dz-message{
+    margin:0px !important;
+}
 
+a{
+    cursor: pointer;
+}
+
+.cursor-pointer{
+    cursor: pointer !important;
+}
+
+html::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #F5F5F5;
+}
+
+html::-webkit-scrollbar
+{
+	width: 6px;
+	background-color: #F5F5F5;
+}
+
+html::-webkit-scrollbar-thumb
+{
+	background-color: #000000;
+}
+
+.custom-scroll::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #F5F5F5;
+}
+
+.custom-scroll::-webkit-scrollbar
+{
+	width: 6px;
+	background-color: #F5F5F5;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb
+{
+	background-color: #000000;
+}
+.body-content{
+    background-color: white;
+    border-radius: 5px;
+    margin: 15px;
+    padding: 15px;
+}

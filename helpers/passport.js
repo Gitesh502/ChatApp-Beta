@@ -9,7 +9,24 @@ module.exports = function (passport) {
     // opts.issuer = "accounts.examplesoft.com";
     // opts.audience = "yoursite.net";
     passport.use(new JwtStrategy(opts, function (jwt_payload, done) {
-        userService.getById(jwt_payload._doc._id, (err, user) => {
+        var query = [{
+            path: 'profileImages',
+            match: {
+                IsActive: true
+            }
+        }, {
+            path: 'posts',
+            match: {
+                IsActive: true
+            }
+        }, {
+            path: 'coverImages',
+            match: {
+                IsActive: true
+            }
+        }];
+
+        userService.getOneById(jwt_payload._doc._id,query,{}, (err, user) => {
             if (err) {
                 return done(err, false);
             }

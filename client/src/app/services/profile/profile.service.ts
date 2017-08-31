@@ -1,7 +1,8 @@
 import { Injectable, Inject } from '@angular/core';
-import { Http, Headers } from '@angular/http';
-import { IAppConfig } from '../../iapp.config';
-import { APP_CONFIG } from '../../app.config';
+import { Http, Headers,RequestOptions } from '@angular/http';
+import { IAppConfig } from '../../config/iapp.config';
+import { APP_CONFIG } from '../../config/app.config';
+
 
 @Injectable()
 export class ProfileService {
@@ -25,7 +26,18 @@ export class ProfileService {
     let headers = new Headers();
     headers.append("Authorization", this.config.authToken);
     headers.append("Content-Type", "application/json");
+   
     return this.http.get(this.config.apiEndpoint + "post/getPostByPostedBy/" + userId, { headers: headers })
+      .map(res => res.json());
+  }
+  
+  deletePost(postId)
+  {
+    let headers = new Headers();
+    headers.append("Authorization", this.config.authToken);
+    headers.append("Content-Type", "application/json");
+    let options = new RequestOptions({ headers: headers, params: {  postId : postId } });
+    return this.http.delete(this.config.apiEndpoint + "post/deletePost", options)
       .map(res => res.json());
   }
 

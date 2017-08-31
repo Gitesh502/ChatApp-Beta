@@ -1,0 +1,109 @@
+<div class="container">
+  <modal id="postDeleteConfirmation">
+    <div class="modal">
+      <div class="modal-body">
+        <div class="modal-header">
+          <div>Delete Post <a class="pull-right" (click)="closeModal('postDeleteConfirmation');"><span>X</span></a></div>
+        </div>
+        <div class="content padding-15">
+          <p>This post will be deleted and you'll no longer be able to find it. You can also edit this post if you just want
+            to change something.</p>
+        </div>
+        <div class="modal-footer">
+          <input type="button" class="btn btn-defualt pull-left" value="Cancel" (click)="closeModal('postDeleteConfirmation')" />
+          <input type="button" class="btn btn-primary pull-right" (click)="confirmDelete()" value="Delete" />
+          </div>
+      </div>
+    </div>
+    <div class="modal-background"></div>
+  </modal>
+  <div class="row">
+    <div class="col-lg-9">
+      <div class="panel-footer" style="max-width:1000px;">
+        <div class="tabbable-panel">
+          <div class="tabbable-line">
+            <div class="tab-content">
+              <div class="tab-pane padding-15 active">
+                <div class="row timeline">
+                  <div class="col-sm-12">
+                    <div class="widget-area no-padding blank">
+                      <div class="status-upload">
+                        <form>
+                          <textarea [(ngModel)]="userPost.PostDescription" class="post-widget" placeholder="What are you doing right now?" [ngModelOptions]="{standalone: true}"></textarea>
+                          <ul>
+                            <li><a title="" data-toggle="tooltip" data-placement="bottom" data-original-title="Audio"><i class="fa fa-music"></i></a></li>
+                            <li><a title="" data-toggle="tooltip" data-placement="bottom" data-original-title="Video"><i class="fa fa-video-camera"></i></a></li>
+                            <li><a title="" data-toggle="tooltip" data-placement="bottom" data-original-title="Sound Record"><i class="fa fa-microphone"></i></a></li>
+                            <li><a title="" data-toggle="tooltip" data-placement="bottom" data-original-title="Picture"><i class="fa fa-picture-o"></i></a></li>
+                          </ul>
+                          <button (click)="onSubmit($event)" class="btn  postToolBar-btn" [ngClass]="{
+                                            'btn--idle': formFirstSubmit,
+                                            'btn--processing': formProcessing
+                                            }">
+                                            <div class="btn__text">Submit</div>
+                                            </button>
+                        </form>
+                      </div>
+                    
+                    </div>
+                 
+                  </div>
+                  <div *ngIf="currentUrl.indexOf('Profile')==-1" class="padding-top-15">&nbsp;</div>
+                  <ng-container *ngFor="let post of postsList">
+                    <div class="col-sm-12" *ngIf="currentUrl.indexOf('Profile')>-1">
+                      <div class="timeline-item period">
+                        <div class="timeline-info"></div>
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content">
+                          <div class="date-divider">
+                            <h2 class="timeline-title">{{post.key | amDateFormat:'MMMM YYYY'}}</h2>
+                            <div class="divider"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-sm-12" *ngFor="let p of post.value">
+                      <div class="panel panel-white post panel-shadow">
+                        <div class="post-heading">
+                          <div class="pull-left image">
+                            <img src="{{config.apiEndpoint}}{{p.PostedBy.profileImages[0].imagePath}}/{{p.PostedBy.profileImages[0].iconName}}" class="img-circle avatar"
+                              alt="user profile image">
+                          </div>
+                          <a title="Delete Post" class="pull-right" (click)="deletePost(p._id)"><i class="fa fa-times"></i></a>
+                          <div class="pull-left meta">
+                            <div class="title h5">
+                              <a href="#"><b>{{p.PostedBy.firstName}} {{p.PostedBy.surName}}</b></a>
+
+                            </div>
+
+                            <h6 class="text-muted time time-ago">{{p.PostedOn | amTimeAgo:true}}</h6>
+                          </div>
+                        </div>
+                        <div class="post-description">
+                          <p>{{p.PostDescription}}</p>
+                          <div class="stats">
+                            <a href="#" class="btn btn-default stat-item">
+                                               <i class="fa fa-thumbs-up icon"></i>2
+                                               </a>
+                            <a href="#" class="btn btn-default stat-item">
+                                               <i class="fa fa-thumbs-down icon"></i>12
+                                               </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+              <div class="tab-pane padding-15 about">
+                <about>
+                  <h1>About My Self</h1>
+                </about>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

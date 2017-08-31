@@ -1,10 +1,10 @@
 import { NgxSiemaOptions, NgxSiemaService } from 'ngx-siema';
 import { Component, OnInit } from '@angular/core';
-import {Router} from '@angular/router';
+import { Router} from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RegisterModel } from '../../models/registerModel';
-import { AccountService } from '../../services/account.service';
-
+import { AccountService } from '../../services/account/account.service';
+import { SharedService } from './../../services/shared/shared.service';
 @Component({
   selector: 'app-welcome',
   templateUrl: './welcome.component.html',
@@ -40,9 +40,10 @@ export class WelcomeComponent implements OnInit {
     private router: Router,
     private ngxSiemaService: NgxSiemaService,
     private fb: FormBuilder,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private sharedService: SharedService
   ) {
-
+    this.sharedService.clearLocalStorage();
     this.registerModel = new RegisterModel();
     this.days = new Array();
     this.months = new Array();
@@ -102,7 +103,7 @@ export class WelcomeComponent implements OnInit {
         .subscribe(
         data => {
           if (data.success) {
-            this.router.navigate(['./Home']);
+            this.router.navigate(['./Confirmation']);
           }
         },
         error => { console.log(error) }
