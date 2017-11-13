@@ -14,8 +14,7 @@ export class AccountService {
     this.apiUrl=config.apiEndpoint;
   }
 
-  registerUser(user)
-  {
+  registerUser(user){
     let headers=new Headers();
     headers.append("Content-Type","application/json");
     return this.http.post(this.apiUrl+"users/register",user,{headers:headers})
@@ -32,18 +31,18 @@ export class AccountService {
 
   getProfile()
   {
-    let headers=new Headers();
-    headers.append("Authorization",this.config.authToken);
-    headers.append("Content-Type","application/json");
-    return this.http.get(this.apiUrl+"users/profile",{headers:headers})
-    .map(res=>res.json());
+    let headers =new Headers();
+    headers.append('Authorization',this.config.authToken);
+    headers.append('Content-Type','application/json');
+    return this.http.get(this.apiUrl + 'users/profile',{headers:headers})
+    .map(res => res.json());
   }
 
- 
+
   logout()
   {
-    this.config.authToken=null;
-    this.config.loggedUserId=null;
+    this.config.authToken = null;
+    this.config.loggedUserId = null;
     localStorage.clear();
   }
 }

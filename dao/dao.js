@@ -111,7 +111,7 @@ class Dao {
      * @param {*} callback 
      */
     update(filter, updateObj, options, callback) {
-        this.collectionType.where(filter).update(updateObj, options).exec(callback);
+        this.collectionType.update(filter,updateObj, options).exec(callback);
     }
     /**
      * http://mongoosejs.com/docs/api.html#query_Query-updateMany
@@ -213,39 +213,4 @@ class Dao {
     //     }
     // }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Dao.prototype.update = function (filter, obj, callback, isMulti) {
-    this.collectionType.update(filter, obj, {
-        "multi": isMulti
-    }, callback);
-}
-
-
-
-
-
-
-
 module.exports = Dao;

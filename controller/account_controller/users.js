@@ -262,7 +262,10 @@ exports.profile = function (req, res) {
  * Returns list of users in fact all users in database
  */
 exports.get = function (req, res) {
-	accountService.get({}, null, null, (err, users) => {
+	var filter={
+		_id: { $nin: req.user._id } ,
+   }
+	accountService.get(filter, null, null, (err, users) => {
 		if (err) throw err;
 		else res.json({
 			success: true,

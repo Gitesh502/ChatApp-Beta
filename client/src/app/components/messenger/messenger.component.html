@@ -3,11 +3,11 @@
     <div class="search">
       <input type="text" placeholder="Search">
     </div>
-    <ul class="list custom-scroll">
+    <ul *ngIf="messengerList" class="list custom-scroll" >
       <ng-container *ngFor="let msg of messengerList">
         <li class="clearfix">
           <a (click)="getMessages(msg.id)">
-              <img *ngIf="msg.UserIds[0].profileImages!=null && msg.UserIds[0].profileImages.length>0" src="{{config.apiEndpoint}}{{msg.UserIds[0].profileImages[0]?.imagePath}}/{{msg.UserIds[0].profileImages[0]?.iconName}}" alt="avatar">
+              <img *ngIf="msg.UserIds?.length>0 && msg.UserIds[0]?.profileImages!=null && msg.UserIds[0]?.profileImages.length>0" src="{{config.apiEndpoint}}{{msg.UserIds[0].profileImages[0]?.imagePath}}/{{msg.UserIds[0].profileImages[0]?.iconName}}" alt="avatar">
               <div class="about">
                 <div class="name">{{msg.UserIds[0].firstName}} {{msg.UserIds[0].surName}}</div>
                 <div class="status">
@@ -17,130 +17,51 @@
             </a>
         </li>
       </ng-container>
-      <li class="clearfix">
-        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_02.jpg" alt="avatar">
-        <div class="about">
-          <div class="name">Aiden Chavez</div>
-          <div class="status">
-            <i class="fa fa-circle offline"></i> left 7 mins ago
-          </div>
-        </div>
-      </li>
-      <li class="clearfix">
-        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_03.jpg" alt="avatar">
-        <div class="about">
-          <div class="name">Mike Thomas</div>
-          <div class="status">
-            <i class="fa fa-circle online"></i> online
-          </div>
-        </div>
-      </li>
-      <li class="clearfix">
-        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_04.jpg" alt="avatar">
-        <div class="about">
-          <div class="name">Erica Hughes</div>
-          <div class="status">
-            <i class="fa fa-circle online"></i> online
-          </div>
-        </div>
-      </li>
-      <li class="clearfix">
-        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_05.jpg" alt="avatar">
-        <div class="about">
-          <div class="name">Ginger Johnston</div>
-          <div class="status">
-            <i class="fa fa-circle online"></i> online
-          </div>
-        </div>
-      </li>
-      <li class="clearfix">
-        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_06.jpg" alt="avatar">
-        <div class="about">
-          <div class="name">Tracy Carpenter</div>
-          <div class="status">
-            <i class="fa fa-circle offline"></i> left 30 mins ago
-          </div>
-        </div>
-      </li>
-      <li class="clearfix">
-        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_07.jpg" alt="avatar">
-        <div class="about">
-          <div class="name">Christian Kelly</div>
-          <div class="status">
-            <i class="fa fa-circle offline"></i> left 10 hours ago
-          </div>
-        </div>
-      </li>
-      <li class="clearfix">
-        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_08.jpg" alt="avatar">
-        <div class="about">
-          <div class="name">Monica Ward</div>
-          <div class="status">
-            <i class="fa fa-circle online"></i> online
-          </div>
-        </div>
-      </li>
-      <li class="clearfix">
-        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_09.jpg" alt="avatar">
-        <div class="about">
-          <div class="name">Dean Henry</div>
-          <div class="status">
-            <i class="fa fa-circle offline"></i> offline since Oct 28
-          </div>
-        </div>
-      </li>
-      <li class="clearfix">
-        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_10.jpg" alt="avatar">
-        <div class="about">
-          <div class="name">Peyton Mckinney</div>
-          <div class="status">
-            <i class="fa fa-circle online"></i> online
-          </div>
-        </div>
-      </li>
     </ul>
   </div>
   <div class="chat col-md-9">
-    <div class="chat-header clearfix">
-      <img *ngIf="converstation!=null && converstation.length>0" src="{{config.apiEndpoint}}{{converstation[0]?.UserIds[0]?.profileImages[0]?.imagePath}}/{{converstation[0]?.UserIds[0]?.profileImages[0]?.iconName}}"
-        alt="avatar">
-      <div class="chat-about">
-        <div class="chat-with">Chat with {{converstation[0]?.UserIds[0].firstName}} {{converstation[0]?.UserIds[0].surName}}</div>
-        <div class="chat-num-messages">already {{converstation[0]?.Messages.length}} messages</div>
+    <ng-container *ngIf="converstation!=null && converstation?.Messages?.length>0">
+      <div class="chat-header clearfix">
+        <img src="{{config.apiEndpoint}}{{converstation?.UserIds[0]?.profileImages[0]?.imagePath}}/{{converstation?.UserIds[0]?.profileImages[0]?.iconName}}"
+          alt="avatar" />
+        <div class="chat-about">
+          <div class="chat-with">Chat with {{converstation?.UserIds[0].firstName}} {{converstation?.UserIds[0].surName}}</div>
+          <div class="chat-num-messages">already {{converstation?.Messages.length}} messages</div>
+        </div>
+        <i class="fa fa-star"></i>
       </div>
-      <i class="fa fa-star"></i>
-    </div>
-    <div class="chat-history custom-scroll">
-      <ul>
-        <ng-container *ngFor="let msg of converstation[0]?.Messages">
-          <ng-template #sentbyme>
-            <li class="clearfix">
-              <div class="message-data align-right">
-                <span class="message-data-time">{{msg.createdOn | amLocale:'en'  | amDateFormat:'hh:mm a'}},  {{msg.createdOn | amTimeAgo:true}}</span>                &nbsp; &nbsp;
-                <span class="message-data-name">Me</span> <i class="fa fa-circle me"></i>
+      <div class="chat-history custom-scroll">
+        <ul>
+          <ng-container *ngFor="let msg of Messages.conversation">
+            <ng-template #sentbyme>
+              <li class="clearfix">
+                <div class="message-data align-right">
+                  <span class="message-data-time">{{msg.createdOn | amLocale:'en'  | amDateFormat:'hh:mm a'}},  {{msg.createdOn | amTimeAgo:true}}</span>                  &nbsp; &nbsp;
+                  <span class="message-data-name">Me</span> <i class="fa fa-circle me"></i>
+                </div>
+                <div class="message other-message float-right">
+                  {{msg.message}}
+                </div>
+              </li>
+            </ng-template>
+            <li *ngIf="converstation.UserIds[0]._id==msg.sender;else sentbyme;">
+              <div class="message-data">
+                <span class="message-data-name"><i class="fa fa-circle online"></i> {{converstation.UserIds[0].firstName}} {{converstation.UserIds[0].surName}}</span>
+                <span class="message-data-time">{{msg.createdOn | amLocale:'en'  | amDateFormat:'hh:mm a'}},  {{msg.createdOn | amTimeAgo:true}}</span>
               </div>
-              <div class="message other-message float-right">
+              <div class="message my-message">
                 {{msg.message}}
               </div>
             </li>
-          </ng-template>
-          <li *ngIf="converstation[0].UserIds[0]._id==msg.sender;else sentbyme;">
-            <div class="message-data">
-              <span class="message-data-name"><i class="fa fa-circle online"></i> {{converstation[0].UserIds[0].firstName}} {{converstation[0].UserIds[0].surName}}</span>
-              <span class="message-data-time">{{msg.createdOn | amLocale:'en'  | amDateFormat:'hh:mm a'}},  {{msg.createdOn | amTimeAgo:true}}</span>
-            </div>
-            <div class="message my-message">
-              {{msg.message}}
-            </div>
-          </li>
-        </ng-container>
-      </ul>
-    </div>
-    <div class="chat-message clearfix">
-      <textarea name="message-to-send" id="message-to-send" placeholder="Type your message" rows="3"></textarea>
-      <i class="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;
-      <i class="fa fa-file-image-o"></i>
-      <button>Send</button>
-    </div>
+          </ng-container>
+        </ul>
+      </div>
+      <div class="chat-message clearfix">
+        <textarea [(ngModel)]="chatMessage.message" name="message-to-send" id="message-to-send" placeholder="Type your message" rows="3"></textarea>
+        <i class="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;
+        <i class="fa fa-file-image-o"></i>
+        <button (click)="sendMessage()">Send</button>
+      </div>
+    </ng-container>
   </div>
 </div>

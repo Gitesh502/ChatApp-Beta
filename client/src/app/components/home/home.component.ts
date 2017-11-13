@@ -1,7 +1,7 @@
 import * as _ from 'underscore';
 import { APP_CONFIG } from '../../config/app.config';
 import { IAppConfig } from '../../config/iapp.config';
-import { chatBoxModel } from '../../models/chatboxModel';
+import { ChatBoxModel } from '../../models/chatboxModel';
 import { Component, OnInit, Inject } from '@angular/core';
 import { ChatService } from '../../services/chat/chat.service';
 
@@ -12,28 +12,29 @@ import { ChatService } from '../../services/chat/chat.service';
 })
 
 export class HomeComponent implements OnInit {
-  public chatBoxes: Array<chatBoxModel>;
+  public chatBoxes: Array<ChatBoxModel>;
 
   constructor(
     @Inject(APP_CONFIG) private config: IAppConfig,
     private chatService: ChatService,
   ) {
-    this.chatBoxes = new Array<chatBoxModel>();
+    this.chatBoxes = new Array<ChatBoxModel>();
   }
 
   ngOnInit() {
   }
 
   openChatBox(event) {
-    var _that = this;
+    const _that = this;
     _that.chatService.getChatId(event.key)
       .subscribe(data => {
-        let chatboxTopush = _.findWhere(_that.chatBoxes, { key: event.user._id });
+        const chatboxTopush = _.findWhere(_that.chatBoxes, { key: event.user._id });
         if (chatboxTopush == null || _.isUndefined(chatboxTopush)) {
-          if (_that.chatBoxes == null || _that.chatBoxes.length == 0)
+          if (_that.chatBoxes == null || _that.chatBoxes.length === 0) {
             event.index = 1;
-          else
-            event.index = _that.chatBoxes.length + 1
+          } else {
+            event.index = _that.chatBoxes.length + 1;
+          }
           _that.chatBoxes.push(event);
         }
       },
@@ -43,10 +44,11 @@ export class HomeComponent implements OnInit {
   }
 
   closeChatBox(event) {
-    let chatBoxToRemove = _.findWhere(this.chatBoxes, { index: event });
+    const chatBoxToRemove = _.findWhere(this.chatBoxes, { index: event });
     this.chatBoxes = _.without(this.chatBoxes, chatBoxToRemove);
-    for (let i in this.chatBoxes) {
-      this.chatBoxes[i].index = parseInt(i) + 1;
+    // tslint:disable-next-line:forin
+    for (const i in this.chatBoxes) {
+      this.chatBoxes[i].index = parseInt(i, 10) + 1;
     }
   }
 }

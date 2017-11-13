@@ -39,10 +39,10 @@ export class NavbarComponent implements OnInit {
     private router: Router,
     private accountService: AccountService,
     private helper: HelperService,
-    private shared:SharedService,
+    private shared: SharedService,
     private appRouteService: AppService,
-    private chatService:ChatService,
-    private chatShared:ChatSharedService
+    private chatService: ChatService,
+    private chatShared: ChatSharedService
   ) {
     this.menuItems = new Array();
     this.loginModel = new LoginModel();
@@ -50,12 +50,12 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
     this.menuItems = [{
-      menuName: "Home",
-      urlName: "Home"
+      menuName: 'Home',
+      urlName: 'Home'
     },
     {
-      menuName: "Dashboard",
-      urlName: "Dashboard"
+      menuName: 'Dashboard',
+      urlName: 'Dashboard'
     }];
     this.buildForm();
   }
@@ -102,7 +102,7 @@ export class NavbarComponent implements OnInit {
           }
         },
         error => {}
-        )
+        );
     }
     else {
     }

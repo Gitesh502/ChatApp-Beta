@@ -41,6 +41,7 @@ const users = require('./routes/user_routes');
 const posts = require('./routes/posts_routes');
 const images = require('./routes/images_routes');
 const chat = require('./routes/chat_routes');
+const friends=require('./routes/friend_route');
 const verifyRoutes=require('./routes/verify_routes');
 /**
  * For cross domain calls
@@ -88,6 +89,7 @@ app.use('/users', users);
 app.use('/post', posts);
 app.use('/images', images);
 app.use('/chat', chat);
+app.use('/friends',friends);
 app.use('/verify',verifyRoutes);
 /**
  * starting the server

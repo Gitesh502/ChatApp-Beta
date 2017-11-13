@@ -101,6 +101,16 @@ body {
     padding: 30px !important;
 }
 
+.padding-10{
+    padding: 10px !important;
+}
+.padding-left{
+    padding-left: 10px !important;
+}
+.padding-right{
+    padding-right: 10px !important;
+}
+
 .slider-display-block
 {
     display: block !important;
@@ -169,4 +179,12 @@ html::-webkit-scrollbar-thumb
     border-radius: 5px;
     margin: 15px;
     padding: 15px;
+}
+
+.text-center{
+    text-align: center !important;
+}
+
+.overflow-hidden{
+    overflow: hidden !important;
 }

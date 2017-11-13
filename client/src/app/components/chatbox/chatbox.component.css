@@ -40,7 +40,7 @@
     background-color: #555;
 }
 .ol-chatbox {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     width: 350px;
     font-family: sans-serif;

@@ -14,6 +14,10 @@ const userImagesSchema=mongoose.Schema({
         type:String
         
     },
+    timeLineImg:{
+        type:String
+        
+    },
     imagePath:{
         type:String,
         require:true

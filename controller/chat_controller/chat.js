@@ -43,7 +43,7 @@ exports.save = function (req, res) {
 				userIds: [
 					req.body.to, req.user._id
 				],
-				updated_at:new Date()
+				updated_at: new Date()
 			});
 			/**
 			 * @param {newChat is new chat object that is to be saved to database} newChat
@@ -57,10 +57,15 @@ exports.save = function (req, res) {
 						error: err
 					});
 				} else {
+					var newMessage = _.orderBy(newChat.conversation, 'createdOn', 'desc');
 					res.json({
 						success: true,
 						msg: "Message saved to database",
-						response: newChat
+						response: newChat,
+						msgToSend: {
+							chatId: newChat._id,
+							message: newMessage[0]
+						}
 					});
 				}
 			});
@@ -68,10 +73,10 @@ exports.save = function (req, res) {
 			/**
 			 * here getting record than uptaiing it, we can use findAndUpdate 
 			 */
-			var query={
-				_id:chat._id
+			var query = {
+				_id: chat._id
 			};
-			chatService.getOne(query,null,{}, (err, chat) => {
+			chatService.getOne(query, null, {}, (err, chat) => {
 				if (err) throw err;
 				if (chat) {
 					chat.conversation.push({
@@ -79,7 +84,7 @@ exports.save = function (req, res) {
 						sender: req.user._id,
 						recipient: req.body.to
 					});
-					chat.updated_at=new Date();
+					chat.updated_at = new Date();
 					chatService.save(chat, (err, newChat, numAffected) => {
 						if (err) {
 							res.json({
@@ -92,7 +97,8 @@ exports.save = function (req, res) {
 							res.json({
 								success: true,
 								msg: "Message saved to database",
-								response: {
+								response: newChat,
+								msgToSend: {
 									chatId: newChat._id,
 									message: newMessage[0]
 								}
@@ -191,7 +197,7 @@ exports.connect = function (socket) {
 	 * All socket ids who are logged in are stored into connnections array
 	 */
 	socket.on('join', function (data) {
-		console.log(data +"user joined");
+		console.log(data + "user joined");
 		var prevConn = _.find(connections, {
 			userId: data
 		});
@@ -213,6 +219,7 @@ exports.connect = function (socket) {
 	 * based on the reciver user id we are filtering conections array and getting socket for sender
 	 * and sending message to that socket
 	 */
+	//console.log(connections);
 	socket.on('transmit-message', function (data) {
 		var skt = _.find(connections, {
 			userId: data.message.recipient
@@ -221,16 +228,35 @@ exports.connect = function (socket) {
 		 * emit uses to invoke client method from server side in swocketio
 		 * after getting socketid or recipetent , sending message to that socketid
 		 */
-		skt.socket.emit('new-message', {
-			type: 'new-message',
-			text: data
-		});
+		if (skt != null) {
+			skt.socket.emit('new-message', {
+				type: 'new-message',
+				text: data
+			});
+		} else {
+			//console.log("connections array",connections);
+			//console.log("skt",skt);
+		}
 	});
 	socket.on('message', function (data) {
-		console.log(data);
+		//console.log(data);
 		socket.emit('message', {
 			message: "test"
 		});
+	});
+	socket.on('friend-request', function (data) {
+		var skt = _.find(connections, {
+			userId: data
+		});
+		if (skt != null) {
+			console.log("emmiting");
+			skt.socket.emit('new-request', {
+				type: 'new-message',
+				text: data
+			});
+		} else {
+			console.log("Error",skt);
+		}
 	});
 }
 /**
@@ -249,8 +275,8 @@ exports.getMessengers = function (req, res) {
 	var popuatQuery = {
 		path: 'userIds',
 		match: {
-			_id:{
-				$ne:req.user._id
+			_id: {
+				$ne: req.user._id
 			}
 		},
 		populate: {

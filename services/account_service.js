@@ -7,7 +7,10 @@ var dao = new Dao(User);
 
 
 module.exports.get = function (filter, populateQuery,sortOptions, callback) {
-	dao.find({}, populateQuery,sortOptions, callback);
+	dao.find(filter, populateQuery,sortOptions, callback);
+}
+module.exports.getByFilter = function (filter, populateQuery,sortOptions, callback) {
+	dao.find(filter, populateQuery,sortOptions, callback);
 }
 module.exports.getOne = function (filter, populateQuery, projectionQuery, callback) {
 	dao.findOne(filter, populateQuery, projectionQuery, callback);

@@ -80,6 +80,26 @@ const userSchema = mongoose.Schema({
     chats: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Chat'
+    }],
+    friendRequestsSent:[{
+        touserId:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref:this
+        },
+       status:{
+           type:String,
+           default:'Pending'
+       }
+    }],
+    friendRequestsReceived:[{
+        fromuserId:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref:this
+        },
+        status:{
+            type:String,
+            default:'Pending'
+        }
     }]
 });
 userSchema.plugin(autoIncrement.plugin, {

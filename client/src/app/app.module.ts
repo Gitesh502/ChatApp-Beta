@@ -37,11 +37,14 @@ import { ModalService } from './services/modal/modal.service';
 import { HelperService } from './services/helpers/helper.service';
 import { SharedService } from './services/shared/shared.service';
 import { ChatService } from './services/chat/chat.service';
+import { SocketService } from './services/sockets/socket.service';
 import { ChatSharedService } from './services/chat/chat-shared.service';
 import { AccountService } from './services/account/account.service';
 import { ProfileService } from './services/profile/profile.service';
+import { FriendsService } from './services/friends/friends.service';
 import { ProfileItemsService } from './services/profile/profile-items.service';
 import { OnlineusersService } from './services/onlineusers/onlineusers.service';
+
 
 ///=========================End Services=============================//
 
@@ -68,7 +71,7 @@ import { TimeAgoPipe } from 'time-ago-pipe';
 import { GroupByPipe } from './pipes/group-by-pipe.pipe';
 ///============================End User Defined Pipes======================================//
 
-//=============================Other configs===================================//
+// =============================Other configs===================================//
 import { AppRoutes } from './routes/app.routes';
 import { AuthGuard } from './guards/auth.guard';
 import { APP_CONFIG, AppConfig } from './config/app.config';
@@ -77,9 +80,15 @@ import { APP_CONFIG, AppConfig } from './config/app.config';
 
 
 
-//=============================End Other configs===================================//
+// =============================End Other configs===================================//
 
-//const chatconfig: SocketIoConfig = { url: 'http://localhost:4001', options: {query:{token:"AppConfig.authToken"}} };
+
+import { NgxCarouselModule, NgxCarouselStore } from 'ngx-carousel';
+import 'hammerjs';
+
+
+
+// const chatconfig: SocketIoConfig = { url: 'http://localhost:4001', options: {query:{token:"AppConfig.authToken"}} };
 
 const DROPZONE_CONFIG: DropzoneConfigInterface = {
   server: 'http://localhost:3000/users/upload',
@@ -123,6 +132,7 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
     BrowserModule,
     MomentModule,
     NgUploaderModule,
+    NgxCarouselModule,
     ReactiveFormsModule,
     NgbModule.forRoot(),
     NgxSiemaModule.forRoot(),
@@ -137,11 +147,13 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
     , ModalService
     , SharedService
     , ProfileService
+    , SocketService
     , { provide: APP_CONFIG, useValue: AppConfig }
     , GroupByPipe
     , ProfileItemsService
     , OnlineusersService
     , ChatService
+    , FriendsService
     , ChatSharedService
   ],
   bootstrap: [AppComponent],
