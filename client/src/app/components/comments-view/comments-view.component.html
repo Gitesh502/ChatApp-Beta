@@ -1,0 +1,43 @@
+<div *ngIf="p!=null" class="extra-comments">
+  <hr />
+  <div class="comment-text-box padding-30">
+    <div class="pull-left image">
+      <img src="{{config.apiEndpoint}}{{p.PostedBy.profileImages[0].imagePath}}/{{p.PostedBy.profileImages[0].iconName}}" class="img-circle avatar" alt="user profile image">
+    </div>
+    <div class="comment-div">
+      <input #commentbox type="text" (keydown.enter)="postComment(commentbox,p)" placeholder="Write a comment" class="comment-box form-control" />
+    </div>
+  </div>
+  <ng-container *ngFor="let comment of comments; let i = index">
+    <div class="post-comments padding-30">
+      <div class="pull-left image">
+        <img src="{{config.apiEndpoint}}{{p.PostedBy.profileImages[0].imagePath}}/{{p.PostedBy.profileImages[0].iconName}}" class="img-circle avatar commentuser-image" alt="user profile image">
+      </div>
+      <p class="comment-text">
+        <strong>Test User</strong> {{comment.comment}}
+      </p>
+      <div class="stats padding-left-50 pull-left">
+        <button class="btn btn-default btn-xs stat-item">
+          <i class="fa fa-thumbs-up icon"></i>2
+        </button>
+        <button class="btn btn-default btn-xs stat-item">
+          <i class="fa fa-thumbs-down icon"></i>12
+        </button>
+        <button (click)="showSubComments(comment,i);" class="btn btn-default btn-xs stat-item">
+          <i class="fa fa-reply icon"></i> 5
+        </button>
+      </div>
+      <ng-container *ngIf="isShowCommentBox && isShowCommentBox[i]?.display==true">
+        <div class="sub-comments">
+          <div class="pull-left image">
+            <img src="{{config.apiEndpoint}}{{p.PostedBy.profileImages[0].imagePath}}/{{p.PostedBy.profileImages[0].iconName}}" class="img-circle avatar" alt="user profile image">
+          </div>
+          <div class="">
+            <input type="text" class="form-control" placeholder="Write a comment" />
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </ng-container>
+
+</div>

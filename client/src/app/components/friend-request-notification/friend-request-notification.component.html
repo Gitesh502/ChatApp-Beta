@@ -1,0 +1,26 @@
+<li class="drop-iem">
+  <div class="col-md-2 col-sm-3 col-xs-3">
+    <div class="notify-img">
+      <img *ngIf="data?.status=='Pending'" src="{{data.from.imgPath}}" alt="">
+      <img *ngIf="data?.status=='Accepted'" src="{{data.to.imgPath}}" alt="">
+    </div>
+  </div>
+  <div class="col-md-10 col-sm-9 col-xs-9 pd-l0">
+    <ng-container *ngIf="data?.status=='Pending'">
+      <a href=""><strong>{{data?.from.firstName}} {{data?.from.surName}}</strong> </a>
+      <div class="pull-right">
+        <spinner name="childSpinner{{data.requestId}}"></spinner>
+        <ng-container *ngIf="!isButtonLoading">
+          <button class="btn btn-primary btn-sm" (click)="confirmRequest(data);">Confirm</button> &nbsp;
+          <button (click)="deleteRequest(data);" class="btn btn-default btn-sm">Delete Request</button></ng-container>
+      </div>
+      <p>sent you request.</p>
+      <p class="time">{{data.requestSentOn | amLocale:'en' | amDateFormat:'hh:mm a'}}, {{data.requestSentOn | amTimeAgo:true}} ago</p>
+    </ng-container>
+    <ng-container *ngIf="data?.status=='Accepted'">
+      <a href=""><strong>{{data?.to.firstName}} {{data?.to.surName}}</strong> </a>
+      <p>has accepeted your request.</p>
+      <p class="time">{{data.requestAcceptedOn | amLocale:'en' | amDateFormat:'hh:mm a'}}, {{data.requestAcceptedOn | amTimeAgo:true}} ago</p>
+    </ng-container>
+  </div>
+</li>

@@ -15,7 +15,7 @@ const {
 } = require('express-validator/filter');
 
 /**
- * Creates new user 
+ * Creates new user
  * Users User model for creating new user
  */
 exports.register = function (req, res) {
@@ -218,17 +218,25 @@ exports.authenticate = function (req, res) {
 					});
 					try {
 						helperService.assignTokenUserId(user._id, token, (err, newRec, numRowsAfftecd) => {
-							if (err) console.log(err);
+							if (err) throw err;
 						});
-					} catch (ex) {}
+					}
+					catch (ex) {
+						throw ex;
+					}
+					accountService.findByIdAndUpdate(user._id,null,{$set:{'isOnline':'Y'}},(err,updateObj)=>{
+						if(err) throw err;
+					});
 					res.json({
 						success: true,
 						token: "JWT " + token,
+						socketToken:token,
 						response: {
 							id: user._id,
 							firstName: user.firstName,
 							surName: user.surName,
 							email: user.email,
+							isOnline:user.isOnline,
 							profileImages: user.profileImages
 						}
 					})
@@ -245,7 +253,7 @@ exports.authenticate = function (req, res) {
 }
 
 /**
- * Get user prfile 
+ * Get user prfile
  * omits password from user object
  */
 exports.profile = function (req, res) {
@@ -258,14 +266,14 @@ exports.profile = function (req, res) {
 }
 
 /**
- * Get all users 
+ * Get all users
  * Returns list of users in fact all users in database
  */
 exports.get = function (req, res) {
 	var filter={
 		_id: { $nin: req.user._id } ,
    }
-	accountService.get(filter, null, null, (err, users) => {
+	accountService.get(filter,null, null, null, (err, users) => {
 		if (err) throw err;
 		else res.json({
 			success: true,
@@ -277,7 +285,7 @@ exports.get = function (req, res) {
 
 /**
  * Get user by email
- * Returns single user object based on email condition  
+ * Returns single user object based on email condition
  */
 exports.getOne = function (req, res) {
 	var query = {
@@ -306,6 +314,63 @@ exports.getOne = function (req, res) {
 	});
 }
 
+exports.updateUser=function(req, res){
+	var query = {
+		_id: req.user._id
+	}
+	accountService.getOne(query, null, {}, (err, user) => {
+		if (err) {
+			res.json({
+				success: false,
+				msg: "Failed to get User",
+				error: err
+			});
+		} else if (!user) {
+			res.json({
+				success: false,
+				msg: "No user found with this id",
+				response: null
+			});
+		} else {
+				if(req.body.firstName)
+					user.firstName=req.body.firstName;
+				if(req.body.surName)
+					user.surName= req.body.surName;
+				if(req.body.surName)
+					user.birthday= req.body.birthday;
+				if(req.body.surName)
+					user.birthmonth= req.body.birthmonth;
+				if(req.body.birthyear)
+					user.birthyear= req.body.birthyear;
+				if(req.body.gender)
+					user.gender= req.body.gender;
+				if(req.body.isFriendRequestSeen && req.body.isFriendRequestSeen==true)
+					user.isFriendRequestSeen=true;
+				else
+					user.isFriendRequestSeen=false;
+
+					accountService.findByIdAndUpdate(req.user._id,{},user, (updateerr, updateuser) => {
+						if (updateerr) {
+							res.json({
+								success: false,
+								msg: "Failed to update user"
+							});
+						} else if (updateuser) {
+							res.json({
+							success: true,
+							msg: "User Found",
+							response: updateuser
+							});
+						}
+					});
+			//});
+		}
+	});
+
+
+
+}
+
 /**
  * testing mail server
  */
@@ -328,6 +393,7 @@ exports.testMail = function (req, res) {
 		}
 	});
 }
+
 
 function checkUser(email) {
 	var isExists = false;

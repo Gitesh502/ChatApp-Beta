@@ -37,4 +37,29 @@ export class FriendsService {
     return this.http.post(this.config.apiEndpoint + 'friends/sendFriendRequest', reqObj, {headers: this.headers})
     .map(res => res.json());
   }
+
+  getFriendRequests()
+  {
+    this.headers=new Headers();
+    this.headers.append('Authorization',this.config.authToken);
+    this.headers.append('Content-Type','application/json');
+    return this.http.get(this.config.apiEndpoint+'friends/getReceivedFriendRequests',{headers:this.headers})
+    .map(res=>res.json());
+  }
+
+  confirmRequest(req:any){
+    this.headers=new Headers();
+    this.headers.append('Authorization',this.config.authToken);
+    this.headers.append('Content-Type','application/json');
+    return this.http.post(this.config.apiEndpoint+"friends/confirmRequest",req,{headers:this.headers})
+    .map(res=>res.json());
+  }
+
+  deleteRequest(req:any){
+    this.headers=new Headers();
+    this.headers.append('Authorization',this.config.authToken);
+    this.headers.append('Content-Type','application/json');
+    return this.http.post(this.config.apiEndpoint+"friends/deleteRequest",req,{headers:this.headers})
+    .map(res=>res.json());
+  }
 }

@@ -1,3 +1,12 @@
+<a name="2.0.1"></a>
+# [2.0.1](https://github.com/lexzhukov/ngx-siema/compare/2.0.0...v2.0.1) (2017-08-19)
+
+
+### Bug Fixes
+
+* **component:** check siema instance on service subscriptions (#54) ([a7d4b45](https://github.com/lexzhukov/ngx-siema/commit/a7d4b45))
+* **component:** fix #55 (#56) ([cf0d708](https://github.com/lexzhukov/ngx-siema/commit/cf0d708)), closes [#55](https://github.com/lexzhukov/ngx-siema/issues/55) [#56](https://github.com/lexzhukov/ngx-siema/issues/56)
+
 <a name="2.0.0"></a>
 # [2.0.0](https://github.com/lexzhukov/ngx-siema/compare/1.2.0...2.0.0) (2017-07-09)
 

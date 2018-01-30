@@ -28,11 +28,11 @@ h1{
       right: 0;
   }
 
-  
+
   ::ng-deep .ngxcarousel-items > .item > .tile
   {
       width: 200px !important;
-      
+
   }
 
   .slider-image{

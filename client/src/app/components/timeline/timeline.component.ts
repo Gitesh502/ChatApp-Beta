@@ -5,7 +5,8 @@ import { IAppConfig } from '../../config/iapp.config';
 import { GroupByPipe } from '../../pipes/group-by-pipe.pipe';
 import { UserPosts, UserModel } from '../../models/profileModel';
 import { ProfileService } from '../../services/profile/profile.service';
-import { Component, OnInit, Inject, AfterViewInit } from '@angular/core';
+import { TimelineService } from '../../services/timeline/timeline.service';
+import { Component, OnInit, Inject, AfterViewInit,ViewChild,ElementRef } from '@angular/core';
 import { ModalService } from '../../services/modal/modal.service';
 @Component({
   selector: 'app-timeline',
@@ -20,10 +21,15 @@ export class TimelineComponent implements OnInit, AfterViewInit {
   public postsList: Array<object>;
   public currentUrl: string = window.location.href;
   private localPostId:string="";
+
+  private isShowComments:any;
+
+  //private loadComponent:Boolean=false;
   constructor(
     private groupBy: GroupByPipe,
     private profileService: ProfileService,
     private modalService:ModalService,
+    private timelineService:TimelineService,
     @Inject(APP_CONFIG) private config: IAppConfig
   ) {
     var _self = this;
@@ -117,5 +123,17 @@ export class TimelineComponent implements OnInit, AfterViewInit {
   }
   closeModal(id: string){
     this.modalService.close(id);
+  }
+
+
+
+
+
+  showComments(p)
+  {
+    var divId=p._id;
+    var dict={};
+    dict[divId]=true;
+    this.isShowComments=dict;
   }
 }

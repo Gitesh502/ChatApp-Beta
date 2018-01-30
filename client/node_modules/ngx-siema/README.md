@@ -2,7 +2,7 @@
 
 # ngx-siema
 
-Lightweight and simple carousel with no dependencies.
+[Siema](https://pawelgrzybek.com/siema/) - Lightweight and simple carousel with no dependencies.
 
 ## Installation
 

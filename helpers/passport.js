@@ -26,7 +26,7 @@ module.exports = function (passport) {
             }
         }];
 
-        userService.getOneById(jwt_payload._doc._id,query,{}, (err, user) => {
+        userService.getOneById(jwt_payload._doc._id,query,{"isOnline":1}, (err, user) => {
             if (err) {
                 return done(err, false);
             }
@@ -34,7 +34,7 @@ module.exports = function (passport) {
                 done(null, user);
             } else {
                 done(null, false);
-                // or you could create a new account 
+                // or you could create a new account
             }
         });
     }));

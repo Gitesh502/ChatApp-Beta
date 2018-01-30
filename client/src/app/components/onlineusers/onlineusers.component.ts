@@ -1,9 +1,11 @@
 import { MessagesModel } from '../../models/chatboxModel';
 import { ChatService } from './../../services/chat/chat.service';
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output ,Inject} from '@angular/core';
 import { OnlineUserModel } from '../../models/onlineUserModel';
 import { OnlineusersService } from '../../services/onlineusers/onlineusers.service';
-
+import { SharedService } from '../../services/shared/shared.service';
+import { APP_CONFIG } from '../../config/app.config';
+import { IAppConfig } from '../../config/iapp.config';
 @Component({
   selector: 'app-onlineusers',
   templateUrl: './onlineusers.component.html',
@@ -16,20 +18,21 @@ export class OnlineusersComponent implements OnInit {
 
   constructor(
     private onlineService: OnlineusersService,
-    private chatService: ChatService
+    private chatService: ChatService,
+    private shared:SharedService,
+      @Inject(APP_CONFIG) private config: IAppConfig
   ) {
     this.OnlineUsers = new Array<OnlineUserModel>();
   }
 
   ngOnInit() {
-    this.getUsers();
+    //this.getUsers();
   }
 
   getUsers() {
     this.onlineService.getUsers()
       .subscribe(
       data => {
-        console.log(data.response);
         this.OnlineUsers = data.response;
       },
       err => {
@@ -39,7 +42,7 @@ export class OnlineusersComponent implements OnInit {
 
   openChat(user) {
     const chatBox = {
-      key: user._id,
+      key: user.id,
       index: 0,
       user: user,
       message: '',

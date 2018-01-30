@@ -9,15 +9,16 @@
       </button>
   </div>
   <div class="collapse navbar-collapse">
-    <ul class="nav navbar-nav">
-      <li *ngFor="let user of OnlineUsers">
+    <ul class="nav navbar-nav user">
+      <li *ngFor="let user of shared.getOnlineUsers()">
         <a (click)="openChat(user)" class="ol-user">
-            <i class="pull-left  fa fa-user"></i>
-           <div class="ol-user-name"> {{user?.firstName}} {{user?.surName}}</div>
-           <div *ngIf="user?.isOnline" class="online-div pull-right">
+            <!-- <i class="pull-left  fa fa-user"></i> -->
+            <img class="pull-left img-circle" [(src)]="config.apiEndpoint+user.img"  [alt]="user?.firstName" />
+           <div class="ol-user-name" style="padding-top:13px;padding-left:50px;"> {{user?.firstName}} {{user?.surName}}</div>
+           <div *ngIf="user?.isOnline=='Y'" class="online-div pull-right padding-right-15">
               <span class="online"></span>
            </div>
-           
+
           </a>
       </li>
     </ul>

@@ -7,5 +7,6 @@ export const AppConfig: IAppConfig = {
     rootUrl: 'http://localhost:4200/',
     authToken: '',
     loggedUserId: '',
-    apiUploadUrl: 'http://localhost:3000'
+    apiUploadUrl: 'http://localhost:3000',
+    socketToken:''
 };

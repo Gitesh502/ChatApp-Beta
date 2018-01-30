@@ -3,10 +3,9 @@ import { RouterModule, Routes,Router } from '@angular/router';
 @Injectable()
 export class AppService {
 
-  constructor(public  router:Router) { 
+  constructor(public  router: Router) {
   }
-  getUrl()
-  {
+  getUrl() {
     return this.router.url;
   }
 }

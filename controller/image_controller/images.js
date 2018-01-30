@@ -47,11 +47,14 @@ exports.saveProfileImage = function (req, res) {
 			.resize(200, 200)
 			.toFile(imgFullPath + "/timeline_" + fileName, function (err) {})
 			.resize(60, 60)
-			.toFile(imgFullPath + "/icon_" + fileName, function (err) {});
+			.toFile(imgFullPath + "/icon_" + fileName, function (err) {})
+			.resize(45, 45)
+			.toFile(imgFullPath + "/icon_45X45_" + fileName, function (err) {});
 		var userImages = new ImagesM({
 			imageTitle: "Profile Image",
 			fileName: "profile_" + fileName,
 			iconName: "icon_" + fileName,
+			icon_45X45:"icon_45X45_"+fileName,
 			timeLineImg: 'timeline_' + fileName,
 			imagePath: pathSaved,
 			IsActive: true,
@@ -83,7 +86,7 @@ exports.saveProfileImage = function (req, res) {
 					});
 				} else {
 					oldProfileImages.push(img._id);
-					accountService.findByIdAndUpdate(userDetails._id, {
+					accountService.findByIdAndUpdate(userDetails._id, null,{
 						'profileImages': oldProfileImages
 					}, (err, user) => {
 						if (err) res.json({
@@ -100,7 +103,7 @@ exports.saveProfileImage = function (req, res) {
 			});
 		});
 
-		
+
 
 	});
 }
@@ -172,7 +175,7 @@ exports.saveCoverImage = function (req, res) {
 			});
 			else {
 				oldCoverImages.push(img._id);
-				accountService.findByIdAndUpdate(userDetails._id, {
+				accountService.findByIdAndUpdate(userDetails._id, null,{
 					'coverImages': oldCoverImages
 				}, (err, user) => {
 					if (err) res.json({

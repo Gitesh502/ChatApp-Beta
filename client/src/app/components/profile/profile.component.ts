@@ -2,7 +2,7 @@ import * as $ from 'jquery';
 import * as _ from 'underscore';
 import * as moment from 'moment';
 import { Router } from '@angular/router';
-import { Lightbox } from 'angular2-lightbox';
+//import { Lightbox } from 'angular2-lightbox';
 import { APP_CONFIG } from '../../config/app.config';
 import { IAppConfig } from '../../config/iapp.config';
 import { ProfileItem } from '../../models/profileItem';
@@ -50,12 +50,12 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   };
   profileItems: ProfileItem[];
   @ViewChild(ProfileDirective) adHost: ProfileDirective;
-  
+
 
   constructor
     (
     private router: Router,
-    private lightbox: Lightbox,
+    //private lightbox: Lightbox,
     private groupBy: GroupByPipe,
     private modalService: ModalService,
     private accountService: AccountService,
@@ -79,10 +79,13 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+
     this.getComponents();
     this.initProfileUploader();
     this.initprofileAccordians();
     this.getProfile();
+
+
   }
 
   ngAfterViewInit() {
@@ -141,13 +144,13 @@ export class ProfileComponent implements OnInit, AfterViewInit {
         }
       },
       err => {
-        console.log(err);
+      throw new Error(err);
       }
       );
   }
 
   initprofileAccordians() {
-    var Accordion = function (el, multiple) {
+    var Accordion = function(el, multiple) {
       this.el = el || {};
       this.multiple = multiple || false;
       // Variables privadas
@@ -155,7 +158,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
       // Evento
       links.on('click', { el: this.el, multiple: this.multiple }, this.dropdown)
     }
-    Accordion.prototype.dropdown = function (e) {
+    Accordion.prototype.dropdown = function(e) {
       var $el = e.data.el;
       var $this = $(this);
       var $next = $this.next();
@@ -177,7 +180,6 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   }
 
   onUploadOutput(output: UploadOutput, type: string): void {
-    console.log(output);
 
     if (output.type === 'allAddedToQueue') {
       if (type == "cover")
@@ -225,8 +227,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
     let comp = _.findWhere(this.profileItems, { componentName: "about" });
     this.loadComponent(comp.component);
   }
-  loadTimeline(event)
-  {
+  loadTimeline(event) {
     let comp = _.findWhere(this.profileItems, { componentName: "timeline" });
     this.loadComponent(comp.component);
   }

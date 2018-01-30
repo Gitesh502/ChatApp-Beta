@@ -31,7 +31,7 @@ View all the directives in action at https://ng-bootstrap.github.io
 
 ## Dependencies
 * [Angular](https://angular.io) (tested with 4.0.3)
-* [Bootstrap 4](https://v4-alpha.getbootstrap.com) (tested with 4.0.0-alpha.6)
+* [Bootstrap 4](https://www.getbootstrap.com) (tested with 4.0.0-beta)
 
 ## Installation
 After installing the above dependencies, install `ng-bootstrap` via:
@@ -89,7 +89,7 @@ See [this](https://github.com/angular/angular/blob/master/README.md) for up-to-d
 * Edge (20+)
 * Safari (7+)
 
-Also check [Bootstrap 4's notes](http://v4-alpha.getbootstrap.com/getting-started/browsers-devices/#internet-explorer-9) on browsers support.
+Also check [Bootstrap 4's notes](https://getbootstrap.com/docs/4.0/getting-started/browsers-devices/#supported-browsers) on browsers support.
 
 ## Contributing to the project
 

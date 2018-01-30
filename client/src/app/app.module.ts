@@ -1,12 +1,14 @@
 
 ///=================Predefined Modules==================//
-import { NgModule } from '@angular/core';
+import { NgModule,ErrorHandler } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { NgxSiemaModule } from 'ngx-siema';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes, UrlSerializer } from '@angular/router';
+import { PushNotificationsModule } from 'angular2-notifications'; //import the module
+
 ///=================End Predefined Modules==================//
 
 ///=====================Components=======================//
@@ -28,6 +30,8 @@ import { MessengerComponent } from './components/messenger/messenger.component';
 import { OnlineusersComponent } from './components/onlineusers/onlineusers.component';
 import { FindFriendsComponent } from './components/find-friends/find-friends.component';
 import { ConfirmationComponent } from './components/confirmation/confirmation.component';
+import { FriendRequestNotificationComponent } from './components/friend-request-notification/friend-request-notification.component';
+
 
 ///========================End Components===================//
 
@@ -38,12 +42,15 @@ import { HelperService } from './services/helpers/helper.service';
 import { SharedService } from './services/shared/shared.service';
 import { ChatService } from './services/chat/chat.service';
 import { SocketService } from './services/sockets/socket.service';
+import { SpinnerService } from './services/spinner/spinner.service';
 import { ChatSharedService } from './services/chat/chat-shared.service';
 import { AccountService } from './services/account/account.service';
 import { ProfileService } from './services/profile/profile.service';
 import { FriendsService } from './services/friends/friends.service';
 import { ProfileItemsService } from './services/profile/profile-items.service';
 import { OnlineusersService } from './services/onlineusers/onlineusers.service';
+import { NotificationsService } from './services/notifications/notifications.service';
+import { TimelineService } from './services/timeline/timeline.service';
 
 
 ///=========================End Services=============================//
@@ -51,7 +58,6 @@ import { OnlineusersService } from './services/onlineusers/onlineusers.service';
 ///==========================Third Party Plugins==========================//
 import { MomentModule } from 'angular2-moment';
 import { NgUploaderModule } from 'ngx-uploader';
-import { LightboxModule } from 'angular2-lightbox';
 import { DropzoneModule } from 'angular2-dropzone-wrapper';
 import { SocketIoModule, SocketIoConfig } from 'ng-socket-io';
 import { DropzoneConfigInterface } from 'angular2-dropzone-wrapper';
@@ -75,6 +81,8 @@ import { GroupByPipe } from './pipes/group-by-pipe.pipe';
 import { AppRoutes } from './routes/app.routes';
 import { AuthGuard } from './guards/auth.guard';
 import { APP_CONFIG, AppConfig } from './config/app.config';
+import { GlobalErrorHandler } from './services/errorhandler/global-error-handler.service';
+
 
 
 
@@ -86,6 +94,13 @@ import { APP_CONFIG, AppConfig } from './config/app.config';
 import { NgxCarouselModule, NgxCarouselStore } from 'ngx-carousel';
 import 'hammerjs';
 
+
+// ============================custom templates============================//
+import { SpinnerComponent } from './components/spinner/spinner.component';
+import { CommentBoxComponent } from './components/comment-box/comment-box.component';
+import { CommentsViewComponent } from './components/comments-view/comments-view.component';
+
+//===========================end custom templates===========================//
 
 
 // const chatconfig: SocketIoConfig = { url: 'http://localhost:4001', options: {query:{token:"AppConfig.authToken"}} };
@@ -124,10 +139,13 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
     FindFriendsComponent,
     ThankYouComponent,
     ConfirmationComponent,
+    SpinnerComponent,
+    FriendRequestNotificationComponent,
+    CommentBoxComponent,
+    CommentsViewComponent,
   ],
   imports: [
     HttpModule,
-    LightboxModule,
     FormsModule,
     BrowserModule,
     MomentModule,
@@ -137,7 +155,8 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
     NgbModule.forRoot(),
     NgxSiemaModule.forRoot(),
     RouterModule.forRoot(AppRoutes),
-    DropzoneModule.forRoot(DROPZONE_CONFIG)
+    DropzoneModule.forRoot(DROPZONE_CONFIG),
+    PushNotificationsModule
   ],
   providers: [
     AppService
@@ -155,6 +174,10 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
     , ChatService
     , FriendsService
     , ChatSharedService
+    , { provide: ErrorHandler, useClass: GlobalErrorHandler }
+    , SpinnerService
+    , NotificationsService
+    , TimelineService
   ],
   bootstrap: [AppComponent],
   entryComponents: [TimelineComponent, AboutComponent],

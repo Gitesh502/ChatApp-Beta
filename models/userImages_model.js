@@ -12,11 +12,15 @@ const userImagesSchema=mongoose.Schema({
     },
     iconName:{
         type:String
-        
+
+    },
+    icon_45X45:{
+        type:String
+
     },
     timeLineImg:{
         type:String
-        
+
     },
     imagePath:{
         type:String,

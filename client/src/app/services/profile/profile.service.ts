@@ -40,5 +40,13 @@ export class ProfileService {
     return this.http.delete(this.config.apiEndpoint + "post/deletePost", options)
       .map(res => res.json());
   }
-
+  
+  updateUser(user:any)
+  {
+    let headers = new Headers();
+    headers.append("Authorization", this.config.authToken);
+    headers.append("Content-Type", "application/json");
+    return this.http.post(this.config.apiEndpoint + "post/updateUser", user, { headers: headers })
+      .map(res => res.json());
+  }
 }

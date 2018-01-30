@@ -1,4 +1,4 @@
-<ngx-carousel [inputs]="carouselTile">
+<!--<ngx-carousel [inputs]="carouselTile">
   <ngx-tile NgxCarouselItem *ngFor="let Tile of carouselTileItems">
     <div class="slider-image">
       <ng-container *ngIf="Tile.profileImages!=null && Tile.profileImages.length>0">
@@ -23,4 +23,31 @@
   </ngx-tile>
   <button NgxCarouselPrev class='leftRs'>&lt;</button>
   <button NgxCarouselNext class='rightRs'>&gt;</button>
-</ngx-carousel>
+</ngx-carousel>-->
+<div class="find-friends">
+  <spinner name="findFrnds" [show]="true"></spinner>
+  <ng-container *ngFor="let Tile of carouselTileItems">
+    <div class="col-md-4 col-lg-4 col-xs-12 affs">
+      <div class="thumbnail right-caption span4">
+        <ng-container *ngIf="Tile.profileImages!=null && Tile.profileImages.length>0">
+          <img [src]="appconfig.apiEndpoint+Tile.profileImages[0].imagePath+'/'+Tile.profileImages[0].timeLineImg" />
+        </ng-container>
+        <div class="caption">
+          <h4>{{Tile.firstName}} {{Tile.surName}}</h4>
+          <div>
+            <button type="button" class="form-control" aria-label="Left Align" (click)='sendRequest(Tile._id)'>
+             <i class="fa fa-user-plus" aria-hidden="true"></i>
+             Add Friend
+           </button>
+          </div>
+          <div class="btn-connect">
+            <button type="button" class="form-control" aria-label="Left Align">
+             <i class="fa fa-wifi" aria-hidden="true"></i>
+             Connect
+           </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

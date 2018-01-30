@@ -5,6 +5,8 @@ import { APP_CONFIG } from '../../config/app.config';
 import { IAppConfig } from '../../config/iapp.config';
 import { FriendsService } from '../../services/friends/friends.service';
 import { SocketService } from '../../services/sockets/socket.service';
+import { SpinnerService } from '../../services/spinner/spinner.service';
+
 @Component({
   selector: 'app-find-friends',
   templateUrl: './find-friends.component.html',
@@ -17,11 +19,12 @@ export class FindFriendsComponent implements OnInit {
   constructor(
     private friendService: FriendsService,
     @Inject(APP_CONFIG) private appconfig: IAppConfig,
-    private socketService: SocketService
+    private socketService: SocketService,
+    private spinnerService: SpinnerService,
   ) {
-    this.getPeople();
+
     this.carouselTile = {
-      grid: { xs: 2, sm: 3, md: 3, lg: 3, all: 0 },
+      grid: { xs: 1, sm: 1, md: 3, lg: 3, all: 0 },
       slide: 2,
       speed: 400,
       animation: 'lazy',
@@ -34,7 +37,9 @@ export class FindFriendsComponent implements OnInit {
     };
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.getPeople();
+  }
   public carouselTileLoad(evt: any) {
     const len = this.carouselTileItems.length;
     if (len <= 30) {
@@ -45,18 +50,25 @@ export class FindFriendsComponent implements OnInit {
   }
 
   public getPeople() {
-    this.friendService.getPeople().subscribe(
-      data => {
-        this.carouselTileItems = data.response;
-      },
-      err => {
-
-      }
-    );
+      this.friendService.getPeople().subscribe(
+        data => {
+          this.carouselTileItems = data.response;
+          this.spinnerService.hide('findFrnds');
+        },
+        err => {
+        }
+      );
   }
 
   sendRequest(id: any) {
-    this.socketService.sendFriendRequest(id);
+      this.socketService.sendFriendRequest(id);
+    // this.friendService.sendFriendRequest(id)
+    //   .subscribe(data => {
+    //     this.socketService.sendFriendRequest(id);
+    //     this.getPeople();
+    //   }, err => {
+    //
+    //   });
   }
 
 }

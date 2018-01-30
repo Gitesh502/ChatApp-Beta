@@ -6,10 +6,6 @@ const accountService = require('../../services/account_service');
 const filters = require('../../helpers/distinctFilter');
 const _ = require("lodash");
 var mongoose = require('mongoose');
-var server = require('http')
-	.createServer(app);
-var io = require('socket.io')(server);
-
 
 /**
  * Method for saving messages to database
@@ -47,7 +43,7 @@ exports.save = function (req, res) {
 			});
 			/**
 			 * @param {newChat is new chat object that is to be saved to database} newChat
-			 * @callback   
+			 * @callback
 			 */
 			chatService.save(newChat, (err, newChat, numAffected) => {
 				if (err) {
@@ -71,7 +67,7 @@ exports.save = function (req, res) {
 			});
 		} else if (chat) {
 			/**
-			 * here getting record than uptaiing it, we can use findAndUpdate 
+			 * here getting record than uptaiing it, we can use findAndUpdate
 			 */
 			var query = {
 				_id: chat._id
@@ -123,7 +119,7 @@ exports.getMessages = function (req, res) {
 			userIds: req.user._id
 		}]
 	};
-	chatService.get(query, null, null, (err, messages) => {
+	chatService.get(query, null,null, null, (err, messages) => {
 		if (err) throw err;
 		else res.json({
 			success: true,
@@ -133,7 +129,7 @@ exports.getMessages = function (req, res) {
 	});
 }
 /**
- * checking if there is chat between two users 
+ * checking if there is chat between two users
  * if there is one than updating and returning the chatid to user
  * if not ,creating a new record to database and returning newly created chatid
  */
@@ -145,7 +141,7 @@ exports.getChatByUserIds = function (req, res) {
 			userIds: req.user._id
 		}]
 	};
-	chatService.get(query, null, null, (err, chat) => {
+	chatService.get(query,null, null, null, (err, chat) => {
 		if (err) throw err;
 		if (!chat) {
 			let newChat = new Chat({
@@ -179,86 +175,7 @@ exports.getChatByUserIds = function (req, res) {
 	});
 }
 
-/**
- * below is socket io code
- * calls when user connects or login
- */
-var connections = [];
-exports.connect = function (socket) {
-	/**
-	 * disconnect invokes when user disconnects or logsout or idle for sometime
-	 */
-	socket.on('disconnect', function (data) {
-		console.log(data, "discconeting")
-	});
-	/**
-	 * invokes when user login or joins 
-	 * putting all scoketids and userids into an array so that we can identify socket based on userid for private chat
-	 * All socket ids who are logged in are stored into connnections array
-	 */
-	socket.on('join', function (data) {
-		console.log(data + "user joined");
-		var prevConn = _.find(connections, {
-			userId: data
-		});
-		if (prevConn != null && prevConn != undefined) {
-			_.remove(connections, {
-				userId: data
-			});
-		}
-		connections.push({
-			userId: data,
-			socket: socket
-		});
-		connections = _.uniqBy(connections, function (e) {
-			return e.userId;
-		});
-	});
-	/**
-	 * when user sneds message to another user private chat follwoing mehtod wil invoke
-	 * based on the reciver user id we are filtering conections array and getting socket for sender
-	 * and sending message to that socket
-	 */
-	//console.log(connections);
-	socket.on('transmit-message', function (data) {
-		var skt = _.find(connections, {
-			userId: data.message.recipient
-		});
-		/**
-		 * emit uses to invoke client method from server side in swocketio
-		 * after getting socketid or recipetent , sending message to that socketid
-		 */
-		if (skt != null) {
-			skt.socket.emit('new-message', {
-				type: 'new-message',
-				text: data
-			});
-		} else {
-			//console.log("connections array",connections);
-			//console.log("skt",skt);
-		}
-	});
-	socket.on('message', function (data) {
-		//console.log(data);
-		socket.emit('message', {
-			message: "test"
-		});
-	});
-	socket.on('friend-request', function (data) {
-		var skt = _.find(connections, {
-			userId: data
-		});
-		if (skt != null) {
-			console.log("emmiting");
-			skt.socket.emit('new-request', {
-				type: 'new-message',
-				text: data
-			});
-		} else {
-			console.log("Error",skt);
-		}
-	});
-}
+
 /**
  * Fecthes all chats and users with whome logged users had a chat
  */
@@ -289,7 +206,7 @@ exports.getMessengers = function (req, res) {
 	var sortOptions = {
 		updated_at: "-1"
 	};
-	chatService.get(query, popuatQuery, sortOptions, (err, chats) => {
+	chatService.get(query, popuatQuery,null, sortOptions, (err, chats) => {
 		if (err)
 			throw err;
 		if (chats) {

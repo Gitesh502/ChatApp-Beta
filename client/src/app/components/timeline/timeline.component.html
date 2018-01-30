@@ -10,8 +10,7 @@
           </div>
         </div>
         <div class="content padding-15">
-          <p>This post will be deleted and you'll no longer be able to find it. You can also edit this post if you just want
-            to change something.</p>
+          <p>This post will be deleted and you'll no longer be able to find it. You can also edit this post if you just want to change something.</p>
         </div>
         <div class="modal-footer">
           <input type="button" class="btn btn-defualt pull-left" value="Cancel" (click)="closeModal('postDeleteConfirmation')" />
@@ -73,7 +72,10 @@
                         <i class="fa fa-users" aria-hidden="true"></i>
                         <label>Few Suggestions</label>
                       </div>
-                      <app-find-friends></app-find-friends>
+                      <ng-container>
+
+                        <app-find-friends></app-find-friends>
+                      </ng-container>
                     </div>
                   </div>
                   <div *ngIf="currentUrl.indexOf('Profile')==-1" class="padding-top-15">&nbsp;</div>
@@ -94,8 +96,7 @@
                       <div class="panel panel-white post panel-shadow">
                         <div class="post-heading">
                           <div class="pull-left image">
-                            <img src="{{config.apiEndpoint}}{{p.PostedBy.profileImages[0].imagePath}}/{{p.PostedBy.profileImages[0].iconName}}" class="img-circle avatar"
-                              alt="user profile image">
+                            <img src="{{config.apiEndpoint}}{{p.PostedBy.profileImages[0].imagePath}}/{{p.PostedBy.profileImages[0].iconName}}" class="img-circle avatar" alt="user profile image">
                           </div>
                           <a title="Delete Post" class="pull-right" (click)="deletePost(p._id)">
                             <i class="fa fa-times"></i>
@@ -105,23 +106,28 @@
                               <a href="#">
                                 <b>{{p.PostedBy.firstName}} {{p.PostedBy.surName}}</b>
                               </a>
-
                             </div>
-
                             <h6 class="text-muted time time-ago">{{p.PostedOn | amTimeAgo:true}}</h6>
                           </div>
                         </div>
                         <div class="post-description">
                           <p>{{p.PostDescription}}</p>
                           <div class="stats">
-                            <a href="#" class="btn btn-default stat-item">
+                            <a href="#" class="btn btn-default btn-sm stat-item">
                               <i class="fa fa-thumbs-up icon"></i>2
                             </a>
-                            <a href="#" class="btn btn-default stat-item">
+                            <a href="#" class="btn btn-default btn-sm stat-item">
                               <i class="fa fa-thumbs-down icon"></i>12
+                            </a>
+                            <a  (click)="showComments(p)" class="btn btn-default btn-sm stat-item">
+                              <i class="fa fa-comment icon"></i>12
                             </a>
                           </div>
                         </div>
+                        <ng-container *ngIf="isShowComments && isShowComments[p._id]==true">
+                            <app-comments-view   [p]="p"></app-comments-view>
+                        </ng-container>
+
                       </div>
                     </div>
                   </ng-container>

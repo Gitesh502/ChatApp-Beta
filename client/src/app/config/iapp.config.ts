@@ -4,4 +4,5 @@ export interface IAppConfig {
     authToken:string;
     loggedUserId:string;
     apiUploadUrl:string;
+    socketToken:string;
 }
