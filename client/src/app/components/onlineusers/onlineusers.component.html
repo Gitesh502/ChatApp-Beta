@@ -1,25 +1,32 @@
 <nav class="navbar navbar-default  sidebar ol-user-list" role="navigation">
 
   <div class="navbar-header">
-    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-sidebar-navbar-collapse-1">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" (click)="isOnlineUsersDisplay=!isOnlineUsersDisplay" [attr.aria-expanded]="!isOnlineUsersDisplay"
+    aria-controls="navbarContent">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
   </div>
-  <div class="collapse navbar-collapse">
+  <div class="collapse navbar-collapse" [ngbCollapse]="!isOnlineUsersDisplay">
     <ul class="nav navbar-nav user">
       <li *ngFor="let user of shared.getOnlineUsers()">
+        <!-- <ng-container *showItBootstrap="['md','lg']">
         <a (click)="openChat(user)" class="ol-user">
-            <!-- <i class="pull-left  fa fa-user"></i> -->
             <img class="pull-left img-circle" [(src)]="config.apiEndpoint+user.img"  [alt]="user?.firstName" />
            <div class="ol-user-name" style="padding-top:13px;padding-left:50px;"> {{user?.firstName}} {{user?.surName}}</div>
            <div *ngIf="user?.isOnline=='Y'" class="online-div pull-right padding-right-15">
               <span class="online"></span>
            </div>
-
           </a>
+        </ng-container> -->
+        <ng-container *showItBootstrap="['lg','md','xs','sm']">
+            <a [routerLink]="['/Messenger']"  [queryParams]="{ user: user.id }" class="ol-user" [style.background-color]="getStyle(user?.isOnline)">
+                <img class="pull-left img-circle" [(src)]="config.apiEndpoint+user.img"  [alt]="user?.firstName" />
+               <div class="ol-user-name" style="padding-top:13px;padding-left:50px;"> {{user?.firstName}} {{user?.surName}}</div>
+              </a>
+            </ng-container>
       </li>
     </ul>
   </div>

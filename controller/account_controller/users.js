@@ -13,6 +13,8 @@ const {
 const {
 	matchedData
 } = require('express-validator/filter');
+const mongoose = require('mongoose');
+
 
 /**
  * Creates new user
@@ -220,23 +222,26 @@ exports.authenticate = function (req, res) {
 						helperService.assignTokenUserId(user._id, token, (err, newRec, numRowsAfftecd) => {
 							if (err) throw err;
 						});
-					}
-					catch (ex) {
+					} catch (ex) {
 						throw ex;
 					}
-					accountService.findByIdAndUpdate(user._id,null,{$set:{'isOnline':'Y'}},(err,updateObj)=>{
-						if(err) throw err;
+					accountService.findByIdAndUpdate(user._id, null, {
+						$set: {
+							'isOnline': 'Y'
+						}
+					}, (err, updateObj) => {
+						if (err) throw err;
 					});
 					res.json({
 						success: true,
 						token: "JWT " + token,
-						socketToken:token,
+						socketToken: token,
 						response: {
 							id: user._id,
 							firstName: user.firstName,
 							surName: user.surName,
 							email: user.email,
-							isOnline:user.isOnline,
+							isOnline: user.isOnline,
 							profileImages: user.profileImages
 						}
 					})
@@ -270,10 +275,12 @@ exports.profile = function (req, res) {
  * Returns list of users in fact all users in database
  */
 exports.get = function (req, res) {
-	var filter={
-		_id: { $nin: req.user._id } ,
-   }
-	accountService.get(filter,null, null, null, (err, users) => {
+	var filter = {
+		_id: {
+			$nin: req.user._id
+		},
+	}
+	accountService.get(filter, null, null, null, (err, users) => {
 		if (err) throw err;
 		else res.json({
 			success: true,
@@ -314,7 +321,7 @@ exports.getOne = function (req, res) {
 	});
 }
 
-exports.updateUser=function(req, res){
+exports.updateUser = function (req, res) {
 	var query = {
 		_id: req.user._id
 	}
@@ -332,37 +339,37 @@ exports.updateUser=function(req, res){
 				response: null
 			});
 		} else {
-				if(req.body.firstName)
-					user.firstName=req.body.firstName;
-				if(req.body.surName)
-					user.surName= req.body.surName;
-				if(req.body.surName)
-					user.birthday= req.body.birthday;
-				if(req.body.surName)
-					user.birthmonth= req.body.birthmonth;
-				if(req.body.birthyear)
-					user.birthyear= req.body.birthyear;
-				if(req.body.gender)
-					user.gender= req.body.gender;
-				if(req.body.isFriendRequestSeen && req.body.isFriendRequestSeen==true)
-					user.isFriendRequestSeen=true;
-				else
-					user.isFriendRequestSeen=false;
+			if (req.body.firstName)
+				user.firstName = req.body.firstName;
+			if (req.body.surName)
+				user.surName = req.body.surName;
+			if (req.body.surName)
+				user.birthday = req.body.birthday;
+			if (req.body.surName)
+				user.birthmonth = req.body.birthmonth;
+			if (req.body.birthyear)
+				user.birthyear = req.body.birthyear;
+			if (req.body.gender)
+				user.gender = req.body.gender;
+			if (req.body.isFriendRequestSeen && req.body.isFriendRequestSeen == true)
+				user.isFriendRequestSeen = true;
+			else
+				user.isFriendRequestSeen = false;
 
-					accountService.findByIdAndUpdate(req.user._id,{},user, (updateerr, updateuser) => {
-						if (updateerr) {
-							res.json({
-								success: false,
-								msg: "Failed to update user"
-							});
-						} else if (updateuser) {
-							res.json({
-							success: true,
-							msg: "User Found",
-							response: updateuser
-							});
-						}
+			accountService.findByIdAndUpdate(req.user._id, {}, user, (updateerr, updateuser) => {
+				if (updateerr) {
+					res.json({
+						success: false,
+						msg: "Failed to update user"
 					});
+				} else if (updateuser) {
+					res.json({
+						success: true,
+						msg: "User Found",
+						response: updateuser
+					});
+				}
+			});
 			//});
 		}
 	});
@@ -394,6 +401,54 @@ exports.testMail = function (req, res) {
 	});
 }
 
+
+exports.getOneById = function (req, res) {
+
+	console.log(req.query.userId)
+	var query = {
+		_id: mongoose.Types.ObjectId(req.query.userId)
+
+	};
+	const projectQuery = {
+		firstName: 1,
+		surName: 1,
+		userId: 1,
+		_id: 1,
+		email: 1,
+		profileImages: 1
+
+	};
+
+	const populateQuery = {
+			path:'profileImages',
+			match:{
+				IsActive:true
+			},
+			select: 'imagePath iconName'
+	};
+	accountService.getOne(query, populateQuery, projectQuery, (err, user) => {
+		if (err) {
+			res.json({
+				success: false,
+				msg: "Failed to get User",
+				error: err
+			});
+		} else if (!user) {
+			res.json({
+				success: false,
+				msg: "No user found with this id",
+				response: null
+			});
+		} else {
+			res.json({
+				success: true,
+				msg: "User Found",
+				response: user
+			});
+		}
+	});
+
+}
 
 function checkUser(email) {
 	var isExists = false;

@@ -9,7 +9,7 @@ const chatService = require('../../services/chat_service');
  * calls when user connects or login
  */
 var connections = [];
-exports.connect = function(socket) {
+exports.connect = function (socket) {
   var userDetails = socket.decoded_token._doc;
   var responseDetails = {
     firstName: userDetails.firstName,
@@ -21,19 +21,25 @@ exports.connect = function(socket) {
   /**
    * disconnect invokes when user disconnects or logsout or idle for sometime
    */
-  socket.on('disconnect', function(data) {
-    var prevConn = _.find(connections, {userId: userDetails._id});
+  socket.on('disconnect', function (data) {
+    var prevConn = _.find(connections, {
+      userId: userDetails._id
+    });
     if (prevConn != null && prevConn != undefined) {
-      _.remove(connections, {userId: userDetails._id});
+      _.remove(connections, {
+        userId: userDetails._id
+      });
     }
-    setTimeout(()=>{
+    setTimeout(() => {
       exports.updateOnlineStatus(userDetails._id, 'N', (result, obj) => {
         var currentUserResponseDetails = [];
         exports.broadcastUsers(userDetails._id, (re, ob) => {
-            responseDetails.isOnline='N';
+          responseDetails.isOnline = 'N';
           ob.forEach((item) => {
             if (item.fromId != null && item.fromId._id.toString() != data) {
-              var skt = _.find(connections, {userId: item.fromId._id.toString()});
+              var skt = _.find(connections, {
+                userId: item.fromId._id.toString()
+              });
 
               if (skt != null) {
                 skt.socket.emit('online-users', {
@@ -50,7 +56,9 @@ exports.connect = function(socket) {
               });
             }
             if (item.toId != null && item.toId._id.toString() != data) {
-              var skt = _.find(connections, {userId: item.toId._id.toString()});
+              var skt = _.find(connections, {
+                userId: item.toId._id.toString()
+              });
               if (skt != null) {
                 skt.socket.emit('online-users', {
                   type: 'online-users',
@@ -66,7 +74,9 @@ exports.connect = function(socket) {
               });
             }
           });
-          var currentUserSkt = _.find(connections, {userId: data});
+          var currentUserSkt = _.find(connections, {
+            userId: data
+          });
           if (currentUserSkt != null) {
             currentUserSkt.socket.emit('online-users', {
               type: 'online-users',
@@ -75,7 +85,7 @@ exports.connect = function(socket) {
           }
         })
       });
-    },1000);
+    }, 1000);
 
   });
   /**
@@ -83,23 +93,32 @@ exports.connect = function(socket) {
    * putting all scoketids and userids into an array so that we can identify socket based on userid for private chat
    * All socket ids who are logged in are stored into connnections array
    */
-  socket.on('join', function(data) {
-    var prevConn = _.find(connections, {userId: data});
+  socket.on('join', function (data) {
+    var prevConn = _.find(connections, {
+      userId: data
+    });
     if (prevConn != null && prevConn != undefined) {
-      _.remove(connections, {userId: data});
+      _.remove(connections, {
+        userId: data
+      });
     }
-    connections.push({userId: data, socket: socket});
-    connections = _.uniqBy(connections, function(e) {
+    connections.push({
+      userId: data,
+      socket: socket
+    });
+    connections = _.uniqBy(connections, function (e) {
       return e.userId;
     });
 
     exports.updateOnlineStatus(data, 'Y', (result, obj) => {
       var currentUserResponseDetails = [];
       exports.broadcastUsers(data, (re, ob) => {
-          responseDetails.isOnline='Y';
+        responseDetails.isOnline = 'Y';
         ob.forEach((item) => {
           if (item.fromId != null && item.fromId._id.toString() != data) {
-            var skt = _.find(connections, {userId: item.fromId._id.toString()});
+            var skt = _.find(connections, {
+              userId: item.fromId._id.toString()
+            });
             if (skt != null) {
               skt.socket.emit('online-users', {
                 type: 'online-users',
@@ -115,7 +134,9 @@ exports.connect = function(socket) {
             });
           }
           if (item.toId != null && item.toId._id.toString() != data) {
-            var skt = _.find(connections, {userId: item.toId._id.toString()});
+            var skt = _.find(connections, {
+              userId: item.toId._id.toString()
+            });
             if (skt != null) {
               skt.socket.emit('online-users', {
                 type: 'online-users',
@@ -131,7 +152,9 @@ exports.connect = function(socket) {
             });
           }
         });
-        var currentUserSkt = _.find(connections, {userId: data});
+        var currentUserSkt = _.find(connections, {
+          userId: data
+        });
         if (currentUserSkt != null) {
           currentUserSkt.socket.emit('online-users', {
             type: 'online-users',
@@ -147,12 +170,14 @@ exports.connect = function(socket) {
    * and sending message to that socket
    */
   //console.log(connections);
-  socket.on('send-message', function(data) {
+  socket.on('send-message', function (data) {
     exports.sendMessage(data.message.sender, data.message.recipient, data.message.message, (err, response) => {
       if (err)
         throw err;
       if (response) {
-        var skt = _.find(connections, {userId: data.message.recipient});
+        var skt = _.find(connections, {
+          userId: data.message.recipient
+        });
         if (skt != null) {
           skt.socket.emit('receive-message', {
             type: 'receive-message',
@@ -163,12 +188,18 @@ exports.connect = function(socket) {
     });
   });
 
-  socket.on('send-request', function(data) {
+  socket.on('send-request', function (data) {
     exports.sendRequest(userDetails._id, data, (err, resp) => {
       if (err) {
-        res.json({success: false, msg: "Failed", response: err});
+        res.json({
+          success: false,
+          msg: "Failed",
+          response: err
+        });
       } else {
-        var skt = _.find(connections, {userId: data});
+        var skt = _.find(connections, {
+          userId: data
+        });
         if (skt != null) {
           skt.socket.emit('receive-request', {
             type: 'new-message',
@@ -182,8 +213,10 @@ exports.connect = function(socket) {
 
   });
 
-  socket.on('request-accepted', function(data) {
-    var skt = _.find(connections, {userId: data});
+  socket.on('request-accepted', function (data) {
+    var skt = _.find(connections, {
+      userId: data
+    });
     if (skt != null) {
       skt.socket.emit('friend-request-accepted-notification', {
         type: 'request-accepted',
@@ -195,7 +228,7 @@ exports.connect = function(socket) {
   });
 }
 
-exports.updateOnlineStatus = function(userId, status, callback) {
+exports.updateOnlineStatus = function (userId, status, callback) {
   accountService.findByIdAndUpdate(userId, null, {
     $set: {
       "isOnline": status
@@ -209,57 +242,51 @@ exports.updateOnlineStatus = function(userId, status, callback) {
   });
 }
 
-exports.broadcastUsers = function(userId, callback) {
+exports.broadcastUsers = function (userId, callback) {
   var query = {
-    $and: [
-      {
-        $or: [
-          {
-            "fromId": userId
-          }, {
-            "toId": userId
-          }
-        ]
+    $and: [{
+      $or: [{
+        "fromId": userId
       }, {
-        "status": 'Accepted'
-      }
-    ]
+        "toId": userId
+      }]
+    }, {
+      "status": 'Accepted'
+    }]
 
   };
 
-  var populateQuery = [
-    {
-      path: 'fromId',
-      select: 'firstName surName _id userId profileImages isOnline',
-      match: {
-        _id: {
-          $ne: userId
-        }
-      },
-      populate: {
-        path: 'profileImages',
-        match: {
-          IsActive: true
-        },
-        select: 'imagePath icon_45X45'
+  var populateQuery = [{
+    path: 'fromId',
+    select: 'firstName surName _id userId profileImages isOnline',
+    match: {
+      _id: {
+        $ne: userId
       }
-    }, {
-      path: 'toId',
-      select: 'firstName surName _id userId profileImages isOnline',
+    },
+    populate: {
+      path: 'profileImages',
       match: {
-        _id: {
-          $ne: userId
-        }
+        IsActive: true
       },
-      populate: {
-        path: 'profileImages',
-        match: {
-          IsActive: true
-        },
-        select: 'imagePath icon_45X45'
-      }
+      select: 'imagePath icon_45X45'
     }
-  ];
+  }, {
+    path: 'toId',
+    select: 'firstName surName _id userId profileImages isOnline',
+    match: {
+      _id: {
+        $ne: userId
+      }
+    },
+    populate: {
+      path: 'profileImages',
+      match: {
+        IsActive: true
+      },
+      select: 'imagePath icon_45X45'
+    }
+  }];
   friendService.find(query, populateQuery, null, null, (err, users) => {
     if (err)
       throw err;
@@ -269,41 +296,58 @@ exports.broadcastUsers = function(userId, callback) {
   });
 }
 
-exports.sendMessage = function(from, to, message, callback) {
+exports.sendMessage = function (from, to, message, callback) {
   var query = {
-    $and: [
-      {
-        userIds: to
-      }, {
-        userIds: from
-      }
-    ]
+    $and: [{
+      userIds: to
+    }, {
+      userIds: from
+    }]
   };
-  var options = {
-    upsert: true,
-    new: true,
-    setDefaultsOnInsert: true
-  };
-  let newChat = {
-    $push: {
-      conversation: {
-        message: message,
-        sender: from,
-        recipient: to
-      }
-    },
-    userIds: [
-      to, from
-    ],
-    updated_at: new Date().toISOString()
-  };
-  var productToUpdate = {};
-  productToUpdate = Object.assign(productToUpdate, newChat._doc);
-  delete productToUpdate._id;
-  chatService.findOneAndUpdate(query, productToUpdate, options, callback);
+
+  chatService.getOne(query, null, {}, (err, chat) => {
+    if (err) throw err;
+
+    if (!chat) {
+      let newChat = new Chat({
+        conversation: [{
+          message: message,
+          sender: from,
+          recipient: to
+        }],
+        userIds: [
+          from, to
+        ],
+        updated_at: new Date().toISOString()
+      });
+      chatService.save(newChat,callback);
+    }
+    else if(chat){
+      var query = {
+				_id: chat._id
+			};
+			chatService.getOne(query, null, {}, (err, chat) => {
+				if (err) throw err;
+				if (chat) {
+					chat.conversation.push({
+						message: message,
+						sender: from,
+						recipient: to
+					});
+					chat.updated_at = new Date().toISOString();
+					chatService.save(chat, callback);
+				}
+			});
+    }
+  });
 }
 
-exports.sendFriendRequest = function(userId, reqUserId, callback) {
-  var frndReq = new FriednRequests({fromId: userId, toId: reqUserId, status: "Pending", requestSentOn: new Date().toISOString()});
+exports.sendFriendRequest = function (userId, reqUserId, callback) {
+  var frndReq = new FriednRequests({
+    fromId: userId,
+    toId: reqUserId,
+    status: "Pending",
+    requestSentOn: new Date().toISOString()
+  });
   friendService.save(frndReq, callback);
 }

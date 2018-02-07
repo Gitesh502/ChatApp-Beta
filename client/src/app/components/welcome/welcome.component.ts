@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RegisterModel } from '../../models/registerModel';
 import { AccountService } from '../../services/account/account.service';
 import { SharedService } from './../../services/shared/shared.service';
+import { ScreenwidthService } from './../../services/screenwidths/screenwidth.service';
 @Component({
   selector: 'app-welcome',
   templateUrl: './welcome.component.html',
@@ -41,20 +42,21 @@ export class WelcomeComponent implements OnInit {
     private ngxSiemaService: NgxSiemaService,
     private fb: FormBuilder,
     private accountService: AccountService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private screenwidth: ScreenwidthService
   ) {
     this.sharedService.clearLocalStorage();
     this.registerModel = new RegisterModel();
     this.days = new Array();
     this.months = new Array();
     this.years = new Array();
-    for (var i = 1; i <= 31; i++) {
+    for (let i = 1; i <= 31; i++) {
       this.days.push(i);
     }
-    for (var i = 1; i <= 12; i++) {
+    for (let i = 1; i <= 12; i++) {
       this.months.push(i);
     }
-    for (var i = 1990; i <= 2017; i++) {
+    for (let i = 1990; i <= 2017; i++) {
       this.years.push(i);
     }
   }

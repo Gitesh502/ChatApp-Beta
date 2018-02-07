@@ -1,7 +1,8 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" (click)="isCollapsed=!isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="navbarContent">
+    <div   class="navbar-header">
+      <button *ngIf="router.url.indexOf('login')==-1" type="button" class="navbar-toggle" data-toggle="collapse" (click)="isCollapsed=!isCollapsed" [attr.aria-expanded]="!isCollapsed"
+        aria-controls="navbarContent">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -9,7 +10,8 @@
       <a class="navbar-brand" href="">Chat App</a>
     </div>
     <div class="collapse navbar-collapse" [ngbCollapse]="!isCollapsed">
-      <form class="navbar-form navbar-left">
+      <ng-container *showItBootstrap="['md','lg']">
+      <form *ngIf="helper.loggedIn()" class="navbar-form navbar-left">
         <div class="input-group header-searchbar">
           <input type="text" class="form-control input-sm" placeholder="Search">
           <div class="input-group-btn">
@@ -19,6 +21,7 @@
           </div>
         </div>
       </form>
+    </ng-container>
       <ul class="nav navbar-nav" *ngIf="helper.loggedIn()">
         <li>
           <a routerLink="/Profile" routerLinkActive="active">{{shared.getLocalProfile().surName}}</a>
@@ -27,15 +30,21 @@
           <a routerLink="/{{item.urlName}}" routerLinkActive="active">{{item.menuName}}</a>
         </li>
         <li class="nav-item dropdown">
-          <a (click)="processRequestNofication();" class="fa-stack  has-badge dropdown-toggle" aria-controls="dropdownBasic1" [attr.aria-expanded]="!toggleFriendRequestDropDown" [(attr.data-count)]="shared.friendRequests.length">
-              <i class="fa fa-user" aria-hidden="true"></i>
-            </a>
+          <a (click)="processRequestNofication();" class="fa-stack  has-badge dropdown-toggle" aria-controls="dropdownBasic1" [attr.aria-expanded]="!toggleFriendRequestDropDown"
+            [(attr.data-count)]="shared.friendRequests.length">
+            <i class="fa fa-user" aria-hidden="true"></i>
+          </a>
 
           <div id="dropdownBasic1" class="dropdown-menu bubble notify-drop" [ngbCollapse]="toggleFriendRequestDropDown">
             <div class="notify-drop-title">
               <div class="row">
-                <div class="col-md-6 col-sm-6 col-xs-6">Friend Requests (<b>{{shared.getReceivedFriendRequests()?.length}}</b>)</div>
-                <div class="col-md-6 col-sm-6 col-xs-6 text-right"><a href="" class="rIcon allRead" data-tooltip="tooltip" data-placement="bottom" title="Settings"><i class="fa fa-dot-circle-o"></i></a></div>
+                <div class="col-md-6 col-sm-6 col-xs-6">Friend Requests (
+                  <b>{{shared.getReceivedFriendRequests()?.length}}</b>)</div>
+                <div class="col-md-6 col-sm-6 col-xs-6 text-right">
+                  <a href="" class="rIcon allRead" data-tooltip="tooltip" data-placement="bottom" title="Settings">
+                    <i class="fa fa-dot-circle-o"></i>
+                  </a>
+                </div>
               </div>
 
             </div>
@@ -43,8 +52,8 @@
               <div class="text-center padding-15 align-middle" *ngIf="shared.getReceivedFriendRequests()==null || shared.getReceivedFriendRequests()?.length==0">
                 <p>No new requests</p>
               </div>
-              <ng-container  *ngFor="let item of shared.getReceivedFriendRequests()" >
-              <app-friend-request-notification [data]="item" (onRequestAccepted)="onRequestAccepted($event)"></app-friend-request-notification>
+              <ng-container *ngFor="let item of shared.getReceivedFriendRequests()">
+                <app-friend-request-notification [data]="item" (onRequestAccepted)="onRequestAccepted($event)"></app-friend-request-notification>
               </ng-container>
               <div class="border padding-10 margin-right-15 margin-left-15">
                 <strong>People you may know</strong>
@@ -55,7 +64,8 @@
 
             </div>
             <div class="notify-drop-footer text-center">
-              <a href=""><i class="fa fa-eye"></i> See All</a>
+              <a href="">
+                <i class="fa fa-eye"></i> See All</a>
             </div>
           </div>
         </li>
@@ -75,16 +85,9 @@
           <a href="#" (click)="onLogoutClick()">Logout</a>
         </li>
       </ul>
-      <form *ngIf="!helper.loggedIn()" class="navbar-form navbar-right form-inline hidden-xs" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <div class="input-group">
-          <input type="email" class="form-control" placeholder="Email" formControlName="loginEmail" id="loginEmail" required>
-        </div>
-        <div class="input-group">
-          <input type="password" class="form-control" placeholder="Password" formControlName="loginPassword" id="loginPassword" required>
-        </div>
-        <button type="submit" class="btn btn-default">Log In</button>
-      </form>
-
+      <ng-container *showItBootstrap="['sm','md','lg']">
+        <app-login *ngIf="!helper.loggedIn()"></app-login>
+      </ng-container>
     </div>
   </div>
 </nav>

@@ -1,12 +1,18 @@
 <div class="container-fluid mrgin-top-50">
-  <app-leftbar></app-leftbar>
-  <div class="home-timeline col-md-9">
+  <div *showItBootstrap="['md','sm','lg']" class="col-md-2 col-sm-2">
+    <app-leftbar></app-leftbar>
+  </div>
+  <div class="col-md-8 col-lg-8 col-xs-12 col-sm-8">
     <app-timeline></app-timeline>
   </div>
-  <app-onlineusers (chatOpened)="openChatBox($event)"></app-onlineusers>
-  <ng-container *ngFor="let chatbox of chatBoxes">
-    <app-chatbox  [chatbox]="chatbox" (chatClosed)="closeChatBox($event)">
-      <!--[chatbox]="chatbox" -->
-    </app-chatbox>
+  <div class="col-md-2 col-sm-2">
+    <app-onlineusers (chatOpened)="openChatBox($event)"></app-onlineusers>
+  </div>
+  <ng-container *showItBootstrap="['md','lg']">
+    <ng-container *ngFor="let chatbox of chatBoxes">
+      <app-chatbox [chatbox]="chatbox" (chatClosed)="closeChatBox($event)">
+        <!--[chatbox]="chatbox" -->
+      </app-chatbox>
+    </ng-container>
   </ng-container>
 </div>

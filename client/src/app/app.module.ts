@@ -1,13 +1,14 @@
 
 ///=================Predefined Modules==================//
-import { NgModule,ErrorHandler } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { NgxSiemaModule } from 'ngx-siema';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes, UrlSerializer } from '@angular/router';
-import { PushNotificationsModule } from 'angular2-notifications'; //import the module
+import { PushNotificationsModule } from 'angular2-notifications'; // import the module
+import { ResponsiveModule } from 'ng2-responsive';
 
 ///=================End Predefined Modules==================//
 
@@ -51,6 +52,7 @@ import { ProfileItemsService } from './services/profile/profile-items.service';
 import { OnlineusersService } from './services/onlineusers/onlineusers.service';
 import { NotificationsService } from './services/notifications/notifications.service';
 import { TimelineService } from './services/timeline/timeline.service';
+import { ScreenwidthService } from './services/screenwidths/screenwidth.service';
 
 
 ///=========================End Services=============================//
@@ -100,7 +102,7 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
 import { CommentBoxComponent } from './components/comment-box/comment-box.component';
 import { CommentsViewComponent } from './components/comments-view/comments-view.component';
 
-//===========================end custom templates===========================//
+// ===========================end custom templates===========================//
 
 
 // const chatconfig: SocketIoConfig = { url: 'http://localhost:4001', options: {query:{token:"AppConfig.authToken"}} };
@@ -156,7 +158,8 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
     NgxSiemaModule.forRoot(),
     RouterModule.forRoot(AppRoutes),
     DropzoneModule.forRoot(DROPZONE_CONFIG),
-    PushNotificationsModule
+    PushNotificationsModule,
+    ResponsiveModule
   ],
   providers: [
     AppService
@@ -178,6 +181,7 @@ const DROPZONE_CONFIG: DropzoneConfigInterface = {
     , SpinnerService
     , NotificationsService
     , TimelineService
+    , ScreenwidthService
   ],
   bootstrap: [AppComponent],
   entryComponents: [TimelineComponent, AboutComponent],

@@ -45,4 +45,6 @@ export class ChatService {
     return this.http.get(this.config.apiEndpoint + 'chat/getMessengers', options)
       .map(res => res.json());
   }
+
+
 }

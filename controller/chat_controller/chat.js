@@ -119,7 +119,7 @@ exports.getMessages = function (req, res) {
 			userIds: req.user._id
 		}]
 	};
-	chatService.get(query, null,null, null, (err, messages) => {
+	chatService.get(query, null, null, null, (err, messages) => {
 		if (err) throw err;
 		else res.json({
 			success: true,
@@ -141,7 +141,7 @@ exports.getChatByUserIds = function (req, res) {
 			userIds: req.user._id
 		}]
 	};
-	chatService.get(query,null, null, null, (err, chat) => {
+	chatService.get(query, null, null, null, (err, chat) => {
 		if (err) throw err;
 		if (!chat) {
 			let newChat = new Chat({
@@ -206,7 +206,7 @@ exports.getMessengers = function (req, res) {
 	var sortOptions = {
 		updated_at: "-1"
 	};
-	chatService.get(query, popuatQuery,null, sortOptions, (err, chats) => {
+	chatService.get(query, popuatQuery, null, sortOptions, (err, chats) => {
 		if (err)
 			throw err;
 		if (chats) {
@@ -218,3 +218,5 @@ exports.getMessengers = function (req, res) {
 		}
 	});
 }
+
+

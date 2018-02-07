@@ -16,7 +16,7 @@ var ChatSchema = new mongoose.Schema({
       },
       createdOn:{
         type:Date,
-        default:Date.now
+        default:new Date().toISOString()
       },
      
     },
@@ -32,7 +32,7 @@ var ChatSchema = new mongoose.Schema({
     type:Boolean,
     default:false
   },
-  updated_at: { type: Date, default: Date.now },
+  updated_at: { type: Date, default: new Date().toISOString() },
   userIds:[{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
 });
 

@@ -1,20 +1,24 @@
 <div class="container-fluid mrgin-top-50 messenger-container clearfix">
-  <div class="people-list col-md-3" id="people-list">
+  <ng-container *showItBootstrap="['xs','sm']">
+    <app-onlineusers></app-onlineusers>
+  </ng-container>
+  <div *showItBootstrap="['lg','md']" class="people-list col-md-3" id="people-list">
     <div class="search">
-      <input type="text" placeholder="Search">
+      <input type="text" placeholder="Search Messenger">
     </div>
-    <ul *ngIf="messengerList" class="list custom-scroll" >
+    <ul *ngIf="messengerList" class="list custom-scroll">
       <ng-container *ngFor="let msg of messengerList">
         <li class="clearfix">
           <a (click)="getMessages(msg.id)">
-              <img *ngIf="msg.UserIds?.length>0 && msg.UserIds[0]?.profileImages!=null && msg.UserIds[0]?.profileImages.length>0" src="{{config.apiEndpoint}}{{msg.UserIds[0].profileImages[0]?.imagePath}}/{{msg.UserIds[0].profileImages[0]?.iconName}}" alt="avatar">
-              <div class="about">
-                <div class="name">{{msg.UserIds[0].firstName}} {{msg.UserIds[0].surName}}</div>
-                <div class="status">
-                  <i class="fa fa-circle online"></i> online
-                </div>
+            <img *ngIf="msg.UserIds?.length>0 && msg.UserIds[0]?.profileImages!=null && msg.UserIds[0]?.profileImages.length>0" src="{{config.apiEndpoint}}{{msg.UserIds[0].profileImages[0]?.imagePath}}/{{msg.UserIds[0].profileImages[0]?.iconName}}"
+              alt="avatar">
+            <div class="about">
+              <div class="name">{{msg.UserIds[0].firstName}} {{msg.UserIds[0].surName}}</div>
+              <div class="status">
+                <i class="fa fa-circle online"></i> online
               </div>
-            </a>
+            </div>
+          </a>
         </li>
       </ng-container>
     </ul>
@@ -36,8 +40,10 @@
             <ng-template #sentbyme>
               <li class="clearfix">
                 <div class="message-data align-right">
-                  <span class="message-data-time">{{msg.createdOn | amLocale:'en'  | amDateFormat:'hh:mm a'}},  {{msg.createdOn | amTimeAgo:true}}</span>                  &nbsp; &nbsp;
-                  <span class="message-data-name">Me</span> <i class="fa fa-circle me"></i>
+                  <span class="message-data-time">{{msg.createdOn | amLocale:'en' | amDateFormat:'hh:mm a'}}, {{msg.createdOn | amTimeAgo:true}}</span> &nbsp;
+                  &nbsp;
+                  <span class="message-data-name">Me</span>
+                  <i class="fa fa-circle me"></i>
                 </div>
                 <div class="message other-message float-right">
                   {{msg.message}}
@@ -46,8 +52,9 @@
             </ng-template>
             <li *ngIf="converstation.UserIds[0]._id==msg.sender;else sentbyme;">
               <div class="message-data">
-                <span class="message-data-name"><i class="fa fa-circle online"></i> {{converstation.UserIds[0].firstName}} {{converstation.UserIds[0].surName}}</span>
-                <span class="message-data-time">{{msg.createdOn | amLocale:'en'  | amDateFormat:'hh:mm a'}},  {{msg.createdOn | amTimeAgo:true}}</span>
+                <span class="message-data-name">
+                  <i class="fa fa-circle online"></i> {{converstation.UserIds[0].firstName}} {{converstation.UserIds[0].surName}}</span>
+                <span class="message-data-time">{{msg.createdOn | amLocale:'en' | amDateFormat:'hh:mm a'}}, {{msg.createdOn | amTimeAgo:true}}</span>
               </div>
               <div class="message my-message">
                 {{msg.message}}

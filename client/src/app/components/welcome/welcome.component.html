@@ -1,6 +1,6 @@
 <div class="container-fluid mrgin-top-50">
     <div class="row">
-        <div class="col-md-6">
+        <div *showItBootstrap="['md','lg']" class="col-md-6">
             <div class="jumbotron">
                 <ngx-siema [options]="options">
                     <ngx-siema-slide class="slider-display-block">
@@ -13,7 +13,7 @@
                     </ngx-siema-slide>
                     <ngx-siema-slide class="slider-display-block">
                         <h2>Login in your account</h2>
-                        <p>Login where ever you want when ever you want and make new friedns</p>
+                        <p>Login where ever you want when ever you want and make new friends</p>
                     </ngx-siema-slide>
                     <ngx-siema-slide class="slider-display-block">
                         <h2>Start distrubing your friends :) </h2>
@@ -22,6 +22,10 @@
                 </ngx-siema>
             </div>
         </div>
+        <div *xs class="col-md-6">
+                <label class="padding-bottom"><h2>Login</h2></label>
+            <app-login ></app-login>
+        </div>
         <div class="col-md-6">
             <label class="padding-bottom"><h2>Register Free</h2></label>
             <form class="form-horizontal" [formGroup]="registerForm" (ngSubmit)="onRegisterSubmit(registerForm.value)">
@@ -29,6 +33,7 @@
                     <div class="col-sm-6">
                         <input type="text" class="form-control" id="firstName"   placeholder="First name"  formControlName="firstName" required/>
                     </div>
+                    <div class="row" *xs>&nbsp;</div>
                     <div class="col-sm-6">
                         <input type="text" class="form-control" id="surName" name="surName" placeholder="Surname" formControlName="surName"/>
                     </div>
@@ -53,6 +58,7 @@
                            </option>
                        </select>
                         </div>
+                        <div class="row" *xs>&nbsp;</div>
                         <div class="col-sm-4 no-left-padding">
                             <select class="form-control" id="birthmonth" formControlName="birthmonth">
                            <option *ngFor="let month of months">
@@ -60,6 +66,7 @@
                            </option>
                        </select>
                         </div>
+                        <div class="row" *xs>&nbsp;</div>
                         <div class="col-sm-4 no-left-padding">
                             <select class="form-control" id="birthyear" formControlName="birthyear">
                             <option *ngFor="let year of years">

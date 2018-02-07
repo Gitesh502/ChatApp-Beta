@@ -1,3 +1,4 @@
+
 import * as moment from 'moment';
 import * as _ from 'underscore';
 import * as io from 'socket.io-client';
@@ -8,10 +9,11 @@ import { IAppConfig } from '../../config/iapp.config';
 import { MessengerModel } from '../../models/chatboxModel';
 import { MessagesModel, ChatDisplayed } from './../../models/chatboxModel';
 import { ChatService } from '../../services/chat/chat.service';
+import { AccountService } from './../../services/account/account.service';
 import { ChatSharedService } from './../../services/chat/chat-shared.service';
 import { SocketService } from './../../services/sockets/socket.service';
-
-import { PushNotificationsService } from 'angular2-notifications'; //import the service
+import { ActivatedRoute, Router } from '@angular/router';
+import { PushNotificationsService } from 'angular2-notifications';
 
 
 @Component({
@@ -28,12 +30,15 @@ export class MessengerComponent implements OnInit {
   public toUserId: string;
   public Messages: MessagesModel;
   public messagesDetailsList: any = [];
+  public userId: String = '';
   constructor(
     private chatService: ChatService,
     private chatShared: ChatSharedService,
     private socketService: SocketService,
     @Inject(APP_CONFIG) private config: IAppConfig,
-    private _pushNotifications: PushNotificationsService
+    private _pushNotifications: PushNotificationsService,
+    private route: ActivatedRoute,
+    private accountService: AccountService
   ) {
     this.toUserId = '';
     this.messengerList = new Array<MessengerModel>();
@@ -42,7 +47,16 @@ export class MessengerComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getMessengers();
+    this.route
+      .queryParams
+      .subscribe(params => {
+        this.userId = params['user'] || null;
+        if (this.userId === null) {
+          this.getMessengers();
+        } else {
+          this.getMessagesByUserId(this.userId);
+        }
+      });
   }
 
   getMessengers() {
@@ -70,16 +84,41 @@ export class MessengerComponent implements OnInit {
     self.chatShared.initMessages(messagesList[0]);
     self.Messages = self.chatShared.getMessages();
   }
+
   sendMessage() {
     const _this = this;
     const message = {
       message: _this.chatMessage.message,
-      from: _this.config.loggedUserId,
-      to: _this.toUserId
+      sender: _this.config.loggedUserId,
+      recipient: _this.toUserId,
+      createdOn: new Date().toISOString()
     };
-    _this.socketService.sendMessage(message);
+    const reqMessage = {
+      message: message
+    };
+
+    _this.socketService.sendMessage(reqMessage);
     _this.chatMessage.message = '';
-    _this.chatShared.pushMessage(message.message);
+    _this.chatShared.pushMessage(reqMessage.message);
+  }
+
+  getMessagesByUserId(toUserId) {
+    this.accountService.getOneById(toUserId)
+      .subscribe(data => {
+        if (data != null && data.response != null) {
+          const userArry = [];
+          userArry.push({
+            profileImages: data.response.profileImages,
+            firstName: data.response.firstName,
+            surName: data.response.surName,
+            userId: data.response.userId,
+            email: data.response.email
+          });
+          this.messengerList.push({ id: data.response._id, UserIds: userArry, Messages: [] });
+        }
+      }, err => {
+
+      });
   }
 
 }

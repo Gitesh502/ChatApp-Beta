@@ -6,6 +6,7 @@ import { OnlineusersService } from '../../services/onlineusers/onlineusers.servi
 import { SharedService } from '../../services/shared/shared.service';
 import { APP_CONFIG } from '../../config/app.config';
 import { IAppConfig } from '../../config/iapp.config';
+import { retry } from 'rxjs/operators/retry';
 @Component({
   selector: 'app-onlineusers',
   templateUrl: './onlineusers.component.html',
@@ -19,14 +20,14 @@ export class OnlineusersComponent implements OnInit {
   constructor(
     private onlineService: OnlineusersService,
     private chatService: ChatService,
-    private shared:SharedService,
+    private shared: SharedService,
       @Inject(APP_CONFIG) private config: IAppConfig
   ) {
     this.OnlineUsers = new Array<OnlineUserModel>();
   }
 
   ngOnInit() {
-    //this.getUsers();
+    // this.getUsers();
   }
 
   getUsers() {
@@ -49,6 +50,13 @@ export class OnlineusersComponent implements OnInit {
       messages: new MessagesModel()
     };
     this.chatOpened.emit(chatBox);
+  }
+
+  getStyle(isOnline): String {
+    if (isOnline === 'Y') {
+      return '#adff2f';
+    }
+    return '';
   }
 
 }

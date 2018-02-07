@@ -151,7 +151,6 @@ exports.saveComment = function(req, res) {
 }
 
 exports.getCommentsByPostId = function(req, res) {
-console.log(req.params.postId)
   var aggregateQuery = [
     {
       $match: {

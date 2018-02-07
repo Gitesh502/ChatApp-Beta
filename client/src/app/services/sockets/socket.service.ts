@@ -20,12 +20,12 @@ export class SocketService {
     self.socket.once('connect', function() {
       self.socket.emit('join', self.config.loggedUserId);
     });
-    self.socket.on("unauthorized", function(error) {
-      if (error.data.type == "UnauthorizedError" || error.data.code == "invalid_token") {
-        alert("User's token has expired");
+    self.socket.on('unauthorized', function(error) {
+      if (error.data.type === 'UnauthorizedError' || error.data.code === 'invalid_token') {
+        alert('User\'s token has expired');
       }
     });
-    self.socket.on("error", function(error) {
+    self.socket.on('error', function(error) {
         console.log(error);
     });
   }

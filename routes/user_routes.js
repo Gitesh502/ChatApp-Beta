@@ -10,6 +10,7 @@ router.post('/updateUser', usercontroller.updateUser);
 router.get('/profile', passport.authenticate('jwt', { session: false }), usercontroller.profile);
 router.get('/getAll',passport.authenticate('jwt', { session: false }), usercontroller.get);
 router.get('/getById/:id',passport.authenticate('jwt', { session: false }), usercontroller.getOne);
+router.get('/getOneById',passport.authenticate('jwt', { session: false }), usercontroller.getOneById);
 router.get("/testMail",usercontroller.testMail);
 module.exports = router;
 

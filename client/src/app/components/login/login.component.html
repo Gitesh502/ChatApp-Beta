@@ -1,3 +1,11 @@
-<p>
-  login works!
-</p>
+<form  class="navbar-form navbar-right form-inline" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+<div class="input-group">
+  <input type="email" class="form-control" placeholder="Email" formControlName="loginEmail" id="loginEmail" required>
+</div>
+<div class="row" *xs>&nbsp;</div>
+<div class="input-group">
+  <input type="password" class="form-control" placeholder="Password" formControlName="loginPassword" id="loginPassword" required>
+</div>
+<div class="row" *xs>&nbsp;</div>
+<button type="submit" class="btn btn-default">Log In</button>
+</form>
