@@ -30,6 +30,9 @@ const postSchema=mongoose.Schema({
     PrivacyType:{
         type:Number,
         require:true
+    },
+    CommentsCount:{
+        type:Number
     }
 
 });

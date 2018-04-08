@@ -1,191 +1,190 @@
 /* You can add global styles to this file, and also import other style files */
+
 @import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 @import "../node_modules/bootstrap/dist/css/bootstrap-theme.css";
 @import "../node_modules/font-awesome/css/font-awesome.css";
+@import "../node_modules/pretty-checkbox/dist/pretty-checkbox.css";
 /* @import "../node_modules/angular2-lightbox/lightbox.css"; */
-@import  'http://www.w3schools.com/lib/w3.css';
+
+@import 'http://www.w3schools.com/lib/w3.css';
 @import "../src/assets/css/modal.css";
-
-
 body {
-    background-color: #eee;
-    overflow-x: hidden;
-    overflow-y: hidden;
-}
-.mrgin-top-50{
-    margin-top: 50px !important;
-}
-.mrgin-top-100{
-    margin-top: 100px;
+  background-color: #eee;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
-.mrgin-top-75{
-    margin-top: 75px;
+.mrgin-top-50 {
+  margin-top: 50px !important;
 }
 
-.no-right-margin{
-    margin-right: 0px !important;
+.mrgin-top-100 {
+  margin-top: 100px;
 }
 
-.no-left-margin{
-    margin-left: 0px !important;
+.mrgin-top-75 {
+  margin-top: 75px;
 }
 
-.margin-right-15{
-    margin-right: 15px !important;
+.no-right-margin {
+  margin-right: 0px !important;
 }
 
-.margin-left-15{
-    margin-left: 15px !important;
+.no-left-margin {
+  margin-left: 0px !important;
 }
 
-.margin-top-15{
-    margin-top: 15px;
+.margin-right-15 {
+  margin-right: 15px !important;
 }
 
-.margin-bottom-15{
-    margin-bottom: 15px;
+.margin-left-15 {
+  margin-left: 15px !important;
 }
 
-.margin-top-bottom-15{
-    margin-top: 15px;
-    margin-bottom: 15px;
+.margin-top-15 {
+  margin-top: 15px;
 }
 
-
-.margin-15{
-    margin: 15px !important;
+.margin-bottom-15 {
+  margin-bottom: 15px;
 }
 
-.margin-30{
-    margin: 30px !important;
+.margin-top-bottom-15 {
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
-.no-right-padding{
-    padding-right: 0px !important;
+.margin-15 {
+  margin: 15px !important;
 }
 
-.no-left-padding{
-    padding-left: 0px !important;
+.margin-30 {
+  margin: 30px !important;
 }
 
-.padding-right-15{
-    padding-right: 15px !important;
+.no-right-padding {
+  padding-right: 0px !important;
 }
 
-.padding-left-15{
-    padding-left: 15px !important;
+.no-left-padding {
+  padding-left: 0px !important;
 }
 
-.padding-top-15{
-    padding-top: 15px;
+.padding-right-15 {
+  padding-right: 15px !important;
 }
 
-.padding-left-25{
-    padding-left: 25px !important;
+.padding-left-15 {
+  padding-left: 15px !important;
 }
 
-.padding-bottom-15{
-    padding-bottom: 15px;
+.padding-top-15 {
+  padding-top: 15px;
 }
 
-.padding-top-bottom-15{
-    padding-top: 15px;
-    padding-bottom: 15px;
+.padding-left-25 {
+  padding-left: 25px !important;
 }
 
-.padding-15{
-    padding:15px !important;
+.padding-bottom-15 {
+  padding-bottom: 15px;
 }
 
-.padding-30{
-    padding: 30px !important;
+.padding-top-bottom-15 {
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 
-.padding-10{
-    padding: 10px !important;
-}
-.padding-left{
-    padding-left: 10px !important;
-}
-.padding-right{
-    padding-right: 10px !important;
+.padding-15 {
+  padding: 15px !important;
 }
 
-.slider-display-block
-{
-    display: block !important;
+.padding-30 {
+  padding: 30px !important;
 }
 
-.container-width-70
-{
-    width:70% !important;
+.padding-10 {
+  padding: 10px !important;
 }
 
-.header-searchbar{
-    width: 560px !important;
+.padding-left {
+  padding-left: 10px !important;
+}
+
+.padding-right {
+  padding-right: 10px !important;
+}
+
+.slider-display-block {
+  display: block !important;
+}
+
+.container-width-70 {
+  width: 70% !important;
+}
+
+.header-searchbar {
+  width: 560px !important;
 }
 
 /* Overwritten styles */
-.well{
-background-image: linear-gradient(to bottom, #ffffff 0%, #ffffff 100%) !important;
-}
-.dz-message{
-    margin:0px !important;
+
+.well {
+  background-image: linear-gradient(to bottom, #ffffff 0%, #ffffff 100%) !important;
 }
 
-a{
-    cursor: pointer;
+.dz-message {
+  margin: 0px !important;
 }
 
-.cursor-pointer{
-    cursor: pointer !important;
+a {
+  cursor: pointer;
 }
 
-html::-webkit-scrollbar-track
-{
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-	background-color: #F5F5F5;
+.cursor-pointer {
+  cursor: pointer !important;
 }
 
-html::-webkit-scrollbar
-{
-	width: 6px;
-	background-color: #F5F5F5;
+html::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #F5F5F5;
 }
 
-html::-webkit-scrollbar-thumb
-{
-	background-color: #000000;
+html::-webkit-scrollbar {
+  width: 6px;
+  background-color: #F5F5F5;
 }
 
-.custom-scroll::-webkit-scrollbar-track
-{
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-	background-color: #F5F5F5;
+html::-webkit-scrollbar-thumb {
+  background-color: #000000;
 }
 
-.custom-scroll::-webkit-scrollbar
-{
-	width: 6px;
-	background-color: #F5F5F5;
+.custom-scroll::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #F5F5F5;
 }
 
-.custom-scroll::-webkit-scrollbar-thumb
-{
-	background-color: #000000;
-}
-.body-content{
-    background-color: white;
-    border-radius: 5px;
-    margin: 15px;
-    padding: 15px;
+.custom-scroll::-webkit-scrollbar {
+  width: 6px;
+  background-color: #F5F5F5;
 }
 
-.text-center{
-    text-align: center !important;
+.custom-scroll::-webkit-scrollbar-thumb {
+  background-color: #000000;
 }
 
-.overflow-hidden{
-    overflow: hidden !important;
+.body-content {
+  background-color: white;
+  border-radius: 5px;
+  margin: 15px;
+  padding: 15px;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.overflow-hidden {
+  overflow: hidden !important;
 }

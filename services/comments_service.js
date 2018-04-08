@@ -22,3 +22,7 @@ module.exports.findOneAndUpdate=function(filter,updateObj, options, callback){
 module.exports.aggregate=function(obj, callback){
 	dao.aggregate(obj, callback);
 }
+
+module.exports.populate=function(result,obj, callback){
+	dao.populate(result,obj,callback);
+}

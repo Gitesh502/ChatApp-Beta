@@ -61,14 +61,13 @@ export class FindFriendsComponent implements OnInit {
   }
 
   sendRequest(id: any) {
-      this.socketService.sendFriendRequest(id);
-    // this.friendService.sendFriendRequest(id)
-    //   .subscribe(data => {
-    //     this.socketService.sendFriendRequest(id);
-    //     this.getPeople();
-    //   }, err => {
-    //
-    //   });
+//      this.socketService.sendFriendRequest(id);
+    this.friendService.sendFriendRequest(id)
+      .subscribe(data => {
+        this.socketService.sendFriendRequest(id);
+        this.getPeople();
+      }, err => {
+      });
   }
 
 }

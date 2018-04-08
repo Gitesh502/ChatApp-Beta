@@ -13,23 +13,31 @@ export class TimelineService {
   }
 
   submitComment(comment) {
-    let headers = new Headers();
-    headers.append("Authorization", this.config.authToken);
-    headers.append("Content-Type", "application/json");
-    return this.http.post(this.config.apiEndpoint + "post/submitComment", comment, { headers: headers })
+    const headers = new Headers();
+    headers.append('Authorization', this.config.authToken);
+    headers.append('Content-Type', 'application/json');
+    return this.http.post(this.config.apiEndpoint + 'post/submitComment', comment, { headers: headers })
+      .map(res => res.json());
+  }
+
+  submitChildComment(comment) {
+    const headers = new Headers();
+    headers.append('Authorization', this.config.authToken);
+    headers.append('Content-Type', 'application/json');
+    return this.http.post(this.config.apiEndpoint + 'post/submitChildComment', comment, { headers: headers })
       .map(res => res.json());
   }
 
   getComments(postId) {
-    var reqOb={
-      parentpostid:postId
-    }
-    let headers = new Headers();
-    headers.append("Authorization", this.config.authToken);
-    headers.append("Content-Type", "application/json");
-    return this.http.get(this.config.apiEndpoint + "post/getCommentsByPostId/"+postId, { headers: headers })
+    const reqOb = {
+      parentpostid: postId
+    };
+    const headers = new Headers();
+    headers.append('Authorization', this.config.authToken);
+    headers.append('Content-Type', 'application/json');
+    return this.http.get(this.config.apiEndpoint + 'post/getCommentsByPostId/' + postId, { headers: headers })
       .map(res => res.json());
   }
-
+  
 
 }

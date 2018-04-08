@@ -31,6 +31,7 @@ export class MessengerComponent implements OnInit {
   public Messages: MessagesModel;
   public messagesDetailsList: any = [];
   public userId: String = '';
+  public chatUserDetails: any;
   constructor(
     private chatService: ChatService,
     private chatShared: ChatSharedService,
@@ -67,7 +68,7 @@ export class MessengerComponent implements OnInit {
         console.log(data);
         _.map(data.response, (item) => {
           self.messagesDetailsList.push(item);
-          self.messengerList.push({ id: item._id, UserIds: item.userIds, Messages: item.conversation })
+          self.messengerList.push({ id: item._id, UserIds: item.userIds, Messages: item.conversation });
         });
       },
       err => {
@@ -79,9 +80,13 @@ export class MessengerComponent implements OnInit {
     const self = this;
     const messages = _.where(self.messengerList, { id: id });
     const messagesList = _.where(self.messagesDetailsList, { _id: id });
-    self.converstation = messages[0];
-    self.toUserId = messages[0].UserIds[0]._id;
-    self.chatShared.initMessages(messagesList[0]);
+    if (messages != null && messages !== 'undefined' && messages.length > 0) {
+      self.converstation = messages[0];
+      self.toUserId = messages[0].UserIds[0]._id;
+    }
+    if (messagesList != null && messagesList !== 'undefined' && messagesList.length > 0) {
+      self.chatShared.initMessages(messagesList[0]);
+    }
     self.Messages = self.chatShared.getMessages();
   }
 
@@ -93,13 +98,28 @@ export class MessengerComponent implements OnInit {
       recipient: _this.toUserId,
       createdOn: new Date().toISOString()
     };
-    const reqMessage = {
-      message: message
-    };
-
-    _this.socketService.sendMessage(reqMessage);
-    _this.chatMessage.message = '';
-    _this.chatShared.pushMessage(reqMessage.message);
+    // const reqMessage = {
+    //   message: message
+    // };
+    // _this.socketService.sendMessage(reqMessage);
+    // _this.chatMessage.message = '';
+    // _this.chatShared.pushMessage(reqMessage.message);
+    _this.chatService.saveMessage(message)
+    .subscribe(data => {
+      if (data != null && data.success) {
+        _this.socketService.sendMessage(data.msgToSend);
+        _this.chatMessage.message = '';
+        _this.chatShared.pushMessage(data.msgToSend.message);
+        const messages = _this.chatShared.getMessages();
+        if (_.contains(messages.userIds, _this.toUserId)) {
+          _this.Messages = messages;
+        }
+      } else {
+        console.log(data);
+      }
+    },
+      err => {
+      });
   }
 
   getMessagesByUserId(toUserId) {
@@ -114,7 +134,13 @@ export class MessengerComponent implements OnInit {
             userId: data.response.userId,
             email: data.response.email
           });
+          const mItems = {
+            id: data.response._id,
+            UserIds: userArry,
+            Messages: []
+          };
           this.messengerList.push({ id: data.response._id, UserIds: userArry, Messages: [] });
+          this.messagesDetailsList.push(mItems);
         }
       }, err => {
 

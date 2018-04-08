@@ -9,7 +9,7 @@ var mongoose = require("mongoose");
 var config = require("./config/config");
 var expressValidator = require("express-validator");
 var app = express();
-var port = 3000;
+var port = process.env.port || 3000;
 
 mongoose.Promise = require("bluebird");
 

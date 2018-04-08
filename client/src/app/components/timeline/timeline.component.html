@@ -10,7 +10,8 @@
           </div>
         </div>
         <div class="content padding-15">
-          <p>This post will be deleted and you'll no longer be able to find it. You can also edit this post if you just want to change something.</p>
+          <p>This post will be deleted and you'll no longer be able to find it. You can also edit this post if you just want
+            to change something.</p>
         </div>
         <div class="modal-footer">
           <input type="button" class="btn btn-defualt pull-left" value="Cancel" (click)="closeModal('postDeleteConfirmation')" />
@@ -96,7 +97,8 @@
                       <div class="panel panel-white post panel-shadow">
                         <div class="post-heading">
                           <div class="pull-left image">
-                            <img src="{{config.apiEndpoint}}{{p.PostedBy.profileImages[0].imagePath}}/{{p.PostedBy.profileImages[0].iconName}}" class="img-circle avatar" alt="user profile image">
+                            <img src="{{config.apiEndpoint}}{{p.PostedBy.profileImages[0].imagePath}}/{{p.PostedBy.profileImages[0].iconName}}" class="img-circle avatar"
+                              alt="user profile image">
                           </div>
                           <a title="Delete Post" class="pull-right" (click)="deletePost(p._id)">
                             <i class="fa fa-times"></i>
@@ -119,13 +121,13 @@
                             <a href="#" class="btn btn-default btn-sm stat-item">
                               <i class="fa fa-thumbs-down icon"></i>12
                             </a>
-                            <a  (click)="showComments(p)" class="btn btn-default btn-sm stat-item">
-                              <i class="fa fa-comment icon"></i>12
+                            <a (click)="showComments(p)" class="btn btn-default btn-sm stat-item">
+                              <i class="fa fa-comment icon"></i>{{p.CommentsCount}}
                             </a>
                           </div>
                         </div>
                         <ng-container *ngIf="isShowComments && isShowComments[p._id]==true">
-                            <app-comments-view   [p]="p"></app-comments-view>
+                          <app-comments-view [p]="p"></app-comments-view>
                         </ng-container>
 
                       </div>

@@ -6,7 +6,8 @@
     <div class="search">
       <input type="text" placeholder="Search Messenger">
     </div>
-    <ul *ngIf="messengerList" class="list custom-scroll">
+    
+    <ul *ngIf="messengerList?.length>0"  class="list custom-scroll"  >
       <ng-container *ngFor="let msg of messengerList">
         <li class="clearfix">
           <a (click)="getMessages(msg.id)">
@@ -24,19 +25,20 @@
     </ul>
   </div>
   <div class="chat col-md-9">
+      <!-- *ngIf="converstation!=null && converstation?.Messages?.length>0" -->
     <ng-container *ngIf="converstation!=null && converstation?.Messages?.length>0">
       <div class="chat-header clearfix">
         <img src="{{config.apiEndpoint}}{{converstation?.UserIds[0]?.profileImages[0]?.imagePath}}/{{converstation?.UserIds[0]?.profileImages[0]?.iconName}}"
           alt="avatar" />
         <div class="chat-about">
-          <div class="chat-with">Chat with {{converstation?.UserIds[0].firstName}} {{converstation?.UserIds[0].surName}}</div>
+          <div class="chat-with">Chat with {{converstation?.UserIds[0]?.firstName}} {{converstation?.UserIds[0]?.surName}}</div>
           <div class="chat-num-messages">already {{converstation?.Messages.length}} messages</div>
         </div>
         <i class="fa fa-star"></i>
       </div>
-      <div class="chat-history custom-scroll">
+      <div #chathistory  class="chat-history custom-scroll" [scrollTop]="chathistory.scrollHeight">
         <ul>
-          <ng-container *ngFor="let msg of Messages.conversation">
+          <ng-container *ngFor="let msg of Messages?.conversation">
             <ng-template #sentbyme>
               <li class="clearfix">
                 <div class="message-data align-right">

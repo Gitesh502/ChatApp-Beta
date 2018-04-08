@@ -33,10 +33,10 @@ export class AppComponent {
         self.chatShared.pushMessage(data.text.message);
         self.chatShared.newMsgReceived();
         const options = { // set options
-          body: 'The truth is, I\'am Iron Man!',
-          icon: 'assets/images/ironman.png' // adding an icon
+          body: data.text.message.message,
+          // icon: 'assets/images/ironman.png' // adding an icon
         };
-        const notify = this._pushNotifications.create('Iron Man', options).subscribe( // creates a notification
+        const notify = this._pushNotifications.create('New Message', options).subscribe( // creates a notification
           res => console.log(res),
           err => console.log(err)
         );
@@ -54,7 +54,7 @@ export class AppComponent {
           globeLastOpened: null
         };
         this.notificationsService.saveNotification(reqObj)
-          .subscribe((data) => {
+          .subscribe((test) => {
 
           });
         self.sharedervice.friendRequests.push(data);
@@ -72,7 +72,7 @@ export class AppComponent {
           globeLastOpened: null
         };
         this.notificationsService.saveNotification(reqObj)
-          .subscribe(data => {
+          .subscribe(ddata => {
 
           });
         self.sharedervice.friendRequests.push(data);
@@ -99,10 +99,21 @@ export class AppComponent {
           }
         });
       },
-      err => {
-        alert(err);
-      }
+        err => {
+          alert(err);
+        }
       );
+
+
+    self.socketService.newPost()
+      .subscribe((data) => {
+        this.sharedervice.notifictaions.push(data);
+      });
+
+    self.socketService.newRoom()
+      .subscribe((room) => {
+        self.socketService.joinRoom(room);
+      });
   }
 
   changeOfRoutes() {

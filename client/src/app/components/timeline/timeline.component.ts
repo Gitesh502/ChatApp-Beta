@@ -1,3 +1,4 @@
+import { SharedService } from './../../services/shared/shared.service';
 import * as moment from 'moment';
 import * as _ from 'underscore';
 import { APP_CONFIG } from '../../config/app.config';
@@ -6,60 +7,73 @@ import { GroupByPipe } from '../../pipes/group-by-pipe.pipe';
 import { UserPosts, UserModel } from '../../models/profileModel';
 import { ProfileService } from '../../services/profile/profile.service';
 import { TimelineService } from '../../services/timeline/timeline.service';
-import { Component, OnInit, Inject, AfterViewInit,ViewChild,ElementRef } from '@angular/core';
+import { SocketService } from '../../services/sockets/socket.service';
+import {
+  Component,
+  OnInit,
+  Inject,
+  AfterViewInit,
+  ViewChild,
+  ElementRef
+} from '@angular/core';
 import { ModalService } from '../../services/modal/modal.service';
 @Component({
   selector: 'app-timeline',
   templateUrl: './timeline.component.html',
   styleUrls: ['./timeline.component.css']
 })
-
 export class TimelineComponent implements OnInit, AfterViewInit {
-  public formFirstSubmit: boolean = false;
-  public formProcessing: boolean = false;
+  public formFirstSubmit: Boolean = false;
+  public formProcessing: Boolean = false;
   public userPost: UserPosts;
   public postsList: Array<object>;
   public currentUrl: string = window.location.href;
-  private localPostId:string="";
+  private localPostId = '';
 
-  private isShowComments:any;
+  private isShowComments: any;
 
-  //private loadComponent:Boolean=false;
+  // private loadComponent:Boolean=false;
   constructor(
     private groupBy: GroupByPipe,
     private profileService: ProfileService,
-    private modalService:ModalService,
-    private timelineService:TimelineService,
+    private modalService: ModalService,
+    private timelineService: TimelineService,
+    private socketService: SocketService,
+    private sharedService: SharedService,
     @Inject(APP_CONFIG) private config: IAppConfig
   ) {
-    var _self = this;
+    const _self = this;
     _self.userPost = new UserPosts();
     _self.postsList = new Array<object>();
-
   }
 
   ngOnInit() {
+
   }
 
   ngAfterViewInit() {
-    var _self = this;
+    const _self = this;
     _self.userPost = new UserPosts();
     _self.postsList = new Array<object>();
     _self.getPosts();
   }
 
   onSubmit($event) {
-    var _self = this;
+    const _self = this;
     $event.preventDefault();
     _self.formFirstSubmit = true;
     _self.formProcessing = true;
     _self.userPost.IsActive = true;
     _self.userPost.PostedBy = _self.config.loggedUserId;
     _self.userPost.PostedOn = new Date().toString();
-    _self.userPost.PostedDate = moment().format("L").toString();
-    _self.profileService.submitPost(_self.userPost)
-      .subscribe(
+    _self.userPost.PostedDate = moment()
+      .format('L')
+      .toString();
+    _self.profileService.submitPost(_self.userPost).subscribe(
       data => {
+        this.sharedService.getOnlineUsers().forEach(item => {
+          _self.socketService.postComment({ id: item.id, text: _self.userPost.PostDescription });
+        });
         _self.userPost = new UserPosts();
         setTimeout(() => {
           _self.formProcessing = false;
@@ -70,26 +84,25 @@ export class TimelineComponent implements OnInit, AfterViewInit {
       err => {
         console.log(err);
       }
-      );
+    );
   }
 
   getPosts() {
-    var _self = this;
-    _self.profileService.getPosts(_self.config.loggedUserId)
-      .subscribe(
+    const _self = this;
+    _self.profileService.getPosts(_self.config.loggedUserId).subscribe(
       data => {
-        _self.postsList = _self.groupBy.transform(data.response, "PostedDate");
+        _self.postsList = _self.groupBy.transform(data.response, 'PostedDate');
       },
       err => {
         console.log(err);
       }
-      )
+    );
   }
 
   deletePost(postId) {
-    var _self = this;
-    _self.localPostId=postId;
-    _self.openModal("postDeleteConfirmation");
+    const _self = this;
+    _self.localPostId = postId;
+    _self.openModal('postDeleteConfirmation');
     // _self.profileService.deletePost(postId)
     //   .subscribe(
     //   data => {
@@ -102,38 +115,29 @@ export class TimelineComponent implements OnInit, AfterViewInit {
     //   }
     //   )
   }
-  confirmDelete()
-  {
-    var _self = this;
-    _self.profileService.deletePost(_self.localPostId)
-      .subscribe(
+  confirmDelete() {
+    const _self = this;
+    _self.profileService.deletePost(_self.localPostId).subscribe(
       data => {
         if (data.success) {
-         _self.getPosts();
-         _self.closeModal("postDeleteConfirmation");
+          _self.getPosts();
+          _self.closeModal('postDeleteConfirmation');
         }
       },
-      err => {
-
-      }
-      )
+      err => { }
+    );
   }
   openModal(id: string) {
     this.modalService.open(id);
   }
-  closeModal(id: string){
+  closeModal(id: string) {
     this.modalService.close(id);
   }
 
-
-
-
-
-  showComments(p)
-  {
-    var divId=p._id;
-    var dict={};
-    dict[divId]=true;
-    this.isShowComments=dict;
+  showComments(p) {
+    const divId = p._id;
+    const dict = {};
+    dict[divId] = true;
+    this.isShowComments = dict;
   }
 }

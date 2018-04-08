@@ -96,7 +96,6 @@ export class WelcomeComponent implements OnInit {
 
   next() {
     this.ngxSiemaService.next();
-    //.subscribe((data: any) => console.log(data));
   }
   onRegisterSubmit(value: any): void {
     console.log(value);

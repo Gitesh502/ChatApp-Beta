@@ -1,4 +1,87 @@
 <div class="container-fluid mrgin-top-50">
+  <modal id="createGroup">
+    <div class="modal">
+      <div class="modal-body">
+        <div class="modal-header">
+          <div>
+            <strong>Create Group</strong>
+            <a class="pull-right" (click)="closeModal('createGroup');">
+              <span>X</span>
+            </a>
+          </div>
+        </div>
+        <div class="content">
+          <div class="main-content">
+            <div class="padding-top-15">
+              <input type="text" [(ngModel)]="groupName" class="form-control" [style.height.px]="50" placeholder="Name your group" />
+            </div>
+            <div class="sub-content">
+              <div class="col-md-8 no-right-padding no-left-padding left-content">
+                <div class="padding-15">
+                  <input type="text" class="form-control" placeholder="Search for people to add" />
+                </div>
+                <div class="people custom-scroll" style="max-height: 300px;overflow-y: auto;">
+                  <ul class="list-group checked-list-box">
+                    <ng-container *ngFor="let user of friendsList; let i=index">
+                      <li #listItem class="list-group-item">
+                        <a (tap)="selectUser(user)" class="ol-user">
+                          <img class="pull-left img-circle" [style.width.px]="25" [(src)]="config.apiEndpoint+user.img" [alt]="user?.firstName" />
+                          <div class="ol-user-name"> {{user?.firstName}} {{user?.surName}}</div>
+                        </a>
+                        <div class="pretty p-default p-thick pull-right" style="margin-top:5px">
+                          <input type="checkbox" (change)="checkUser(user,$event)" [checked]="isChecked(user)" />
+                          <div class="state">
+                            <label></label>
+                          </div>
+                        </div>
+                      </li>
+                    </ng-container>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-md-4 right-content">
+                <div class="selected-people custom-scroll">
+                  <div class="padding-top-15">
+                    <div>
+                      <strong>
+                        <p class="selected-header-count">SELECTED
+                          <span class="pull-right">{{selectedUsers.length}}</span>
+                        </p>
+                      </strong>
+
+                    </div>
+                    <div class="padding-top-15">
+                      <ul>
+                        <ng-container *ngFor="let user of selectedUsers">
+                          <li class="selected-user">
+                            <a class="ol-user" (tap)="unselectedUser(user)">
+                              <img class="pull-left img-circle" [style.width.px]="25" [(src)]="config.apiEndpoint+user.img" [alt]="user?.firstName" />
+                              <div class="ol-user-name"> {{user?.firstName}} {{user?.surName}}</div>
+                              <span class="pull-right">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                              </span>
+                            </a>
+                          </li>
+                        </ng-container>
+                      </ul>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-base">
+          <div class="footer">
+            <input type="button" class="btn btn-default btn-sm" value="Cancel" (click)="closeModal('createGroup');" />
+            <button class="btn btn-sm btn-primary" (click)="createGroup()">Create</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-background"></div>
+  </modal>
   <div *showItBootstrap="['md','sm','lg']" class="col-md-2 col-sm-2">
     <app-leftbar></app-leftbar>
   </div>
@@ -6,7 +89,7 @@
     <app-timeline></app-timeline>
   </div>
   <div class="col-md-2 col-sm-2">
-    <app-onlineusers (chatOpened)="openChatBox($event)"></app-onlineusers>
+    <app-onlineusers (chatOpened)="openChatBox($event)" (createGroup)="openCreateGroupPopup()"></app-onlineusers>
   </div>
   <ng-container *showItBootstrap="['md','lg']">
     <ng-container *ngFor="let chatbox of chatBoxes">

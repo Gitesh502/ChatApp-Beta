@@ -114,3 +114,13 @@ section {
 .user{
     width: 100%;
 }  
+.online-toolbox{
+    bottom: 0px;
+    position: fixed;
+    border-top:1px solid #ccc;
+    width:inherit;
+    display: inline-flex;
+}
+.online-toolbox > .toolbox-item{
+    width: 33.3%;
+}

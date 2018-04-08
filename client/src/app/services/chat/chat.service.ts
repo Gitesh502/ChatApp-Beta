@@ -9,7 +9,7 @@ export class ChatService {
   constructor(
     private http: Http,
     @Inject(APP_CONFIG) private config: IAppConfig
-  ) {}
+  ) { }
 
   saveMessage(message) {
     const headers = new Headers();
@@ -19,11 +19,11 @@ export class ChatService {
       .map(res => res.json());
   }
 
-  getMessages( to: string) {
+  getMessages(to: string) {
     const headers = new Headers();
     headers.append('Authorization', this.config.authToken);
     headers.append('Content-Type', 'application/json');
-    const options = new RequestOptions({ headers: headers, params: {  toId: to } });
+    const options = new RequestOptions({ headers: headers, params: { chatId: to } });
     return this.http.get(this.config.apiEndpoint + 'chat/getMessages', options)
       .map(res => res.json());
   }
@@ -32,6 +32,7 @@ export class ChatService {
     const headers = new Headers();
     headers.append('Authorization', this.config.authToken);
     headers.append('Content-Type', 'application/json');
+
     const options = new RequestOptions({ headers: headers, params: { toId: to } });
     return this.http.get(this.config.apiEndpoint + 'chat/getChatId', options)
       .map(res => res.json());
@@ -41,10 +42,33 @@ export class ChatService {
     const headers = new Headers();
     headers.append('Authorization', this.config.authToken);
     headers.append('Content-Type', 'application/json');
-    const options = new RequestOptions({ headers: headers});
+    const options = new RequestOptions({ headers: headers });
     return this.http.get(this.config.apiEndpoint + 'chat/getMessengers', options)
       .map(res => res.json());
   }
 
+  createGroup(userIds) {
+    const headers = new Headers();
+    headers.append('Authorization', this.config.authToken);
+    headers.append('Content-Type', 'application/json');
+    return this.http.post(this.config.apiEndpoint + 'chat/createGroup', userIds, { headers: headers })
+      .map(res => res.json());
+  }
 
+  getGroups() {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', this.config.authToken);
+    return this.http.get(this.config.apiEndpoint + 'chat/getGroups', { headers: headers })
+      .map(res => res.json());
+  }
+
+  createChat(userIds) {
+    const headers = new Headers();
+    headers.append('Authorization', this.config.authToken);
+    headers.append('Content-Type', 'application/json');
+    return this.http.post(this.config.apiEndpoint + 'chat/createChat', userIds, { headers: headers })
+      .map(res => res.json());
+  }
+  
 }

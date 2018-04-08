@@ -1,58 +1,99 @@
 <div class="ol-chatbox" [style.right.px]="getBoxStyle(chatbox?.index)">
   <div class="">
-     <div class="panel panel-primary">
-        <div class="panel-heading">
-           <span>{{chatbox?.user?.firstName}}</span>
-           <div class="btn-group pull-right">
-              <a class="fa fa-window-close" (click)="closeChatBox(chatbox.index)"></a>
-           </div>
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <span *ngIf="chatbox.isGroup==true;else userFirstName">{{chatbox?.groupName}}</span>
+        <ng-template #userFirstName>{{chatbox?.user?.firstName}}</ng-template>
+        <div class="btn-group pull-right">
+          <a class="fa fa-window-close" (click)="closeChatBox(chatbox.index)"></a>
         </div>
-        <div class="panel-body">
-           <ul class="chat">
-              <ng-container *ngFor="let chat of chatbox?.messages.conversation">
-                 <li *ngIf="chat.sender==chatbox.key;else myMessages" class="left clearfix">
-                    <span class="chat-img pull-left">
+      </div>
+      <div #chathistory class="panel-body" [scrollTop]="chathistory.scrollHeight">
+        <ul class="chat">
+          <ng-container *ngFor="let chat of chatbox?.messages.conversation">
+
+            <ng-container *ngIf="chatbox.isGroup==true ; else individualMsg">
+              <li *ngIf="chat.sentBy==config.loggedUserId;else otherMessages" class="right clearfix">
+                <span class="chat-img pull-right">
+                  <img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" />
+                </span>
+                <div class="chat-body clearfix">
+                  <div class="header">
+                    <small class=" text-muted">
+                      <span class="glyphicon glyphicon-time"></span>{{chat.createdOn | amTimeAgo:true}}</small>
+                    <strong class="pull-right primary-font">{{sharedService.getLocalProfile().firstName}}</strong>
+                  </div>
+                  <p>
+                    {{chat.message}}
+                  </p>
+                </div>
+              </li>
+              <ng-template #otherMessages>
+                <li class="left clearfix">
+                  <span class="chat-img pull-left">
                     <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
-                    </span>
-                    <div class="chat-body clearfix">
-                       <div class="header">
-                          <strong class="primary-font">{{chatbox?.user?.firstName}}</strong> <small class="pull-right text-muted">
-                          <span class="glyphicon glyphicon-time"></span> {{chat.createdOn | amTimeAgo:true}}</small>
-                       </div>
-                       <p>
-                          {{chat.message}}
-                       </p>
+                  </span>
+                  <div class="chat-body clearfix">
+                    <div class="header">
+                      <strong class="primary-font">{{chat?.sender?.firstName}}</strong>
+                      <small class="pull-right text-muted">
+                        <span class="glyphicon glyphicon-time"></span> {{chat.createdOn | amTimeAgo:true}}</small>
                     </div>
-                 </li>
-                 <ng-template #myMessages>
-                    <li class="right clearfix">
-                       <span class="chat-img pull-right">
-                       <img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" />
-                       </span>
-                       <div class="chat-body clearfix">
-                          <div class="header">
-                             <small class=" text-muted"><span class="glyphicon glyphicon-time"></span>{{chat.createdOn | amTimeAgo:true}}</small>
-                             <strong class="pull-right primary-font">{{sharedService.getLocalProfile().firstName}}</strong>
-                          </div>
-                          <p>
-                             {{chat.message}}
-                          </p>
-                       </div>
-                    </li>
-                 </ng-template>
-              </ng-container>
-           </ul>
-        </div>
-        <div class="panel-footer">
-           <div class="input-group">
-              <input [(ngModel)]="chatbox.message" type="text" class="form-control input-sm" placeholder="Type your message here..."
-              />
-              <span class="input-group-btn">
-              <button class="btn btn-warning btn-sm" (click)="sendMessage()">
+                    <p>
+                      {{chat.message}}
+                    </p>
+                  </div>
+
+                </li>
+              </ng-template>
+            </ng-container>
+
+            <ng-template #individualMsg>
+              <li *ngIf="chat.sentBy!=config.loggedUserId;else myMessages" class="left clearfix">
+                <span class="chat-img pull-left">
+                  <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
+                </span>
+                <div class="chat-body clearfix">
+                  <div class="header">
+                    <strong class="primary-font">{{chatbox?.user?.firstName}}</strong>
+                    <small class="pull-right text-muted">
+                      <span class="glyphicon glyphicon-time"></span> {{chat.createdOn | amTimeAgo:true}}</small>
+                  </div>
+                  <p>
+                    {{chat.message}}
+                  </p>
+                </div>
+              </li>
+            </ng-template>
+              <ng-template #myMessages>
+                <li class="right clearfix">
+                  <span class="chat-img pull-right">
+                    <img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" />
+                  </span>
+                  <div class="chat-body clearfix">
+                    <div class="header">
+                      <small class=" text-muted">
+                        <span class="glyphicon glyphicon-time"></span>{{chat.createdOn | amTimeAgo:true}}</small>
+                      <strong class="pull-right primary-font">{{sharedService.getLocalProfile().firstName}}</strong>
+                    </div>
+                    <p>
+                      {{chat.message}}
+                    </p>
+                  </div>
+                </li>
+            </ng-template>
+          </ng-container>
+        </ul>
+      </div>
+      <div class="panel-footer">
+        <div class="input-group">
+          <input [(ngModel)]="chatbox.message" type="text" class="form-control input-sm" placeholder="Type your message here..." />
+          <span class="input-group-btn">
+            <button class="btn btn-warning btn-sm" (click)="sendMessage()">
               Send</button>
-              </span>
-           </div>
+          </span>
         </div>
-     </div>
+      </div>
+    </div>
   </div>
 </div>

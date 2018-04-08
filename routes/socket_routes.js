@@ -7,13 +7,17 @@ var io = require('socket.io')(server);
 var socketioJwt = require('socketio-jwt');
 const socketController = require('../controller/socket_controller/sockets');
 const config = require('../config/config');
-
+const socketPort=process.env.port || 4000;
 io.use(socketioJwt.authorize({
   secret: config.secretkey,
   handshake: true
 }));
 io.on('connection', socketController.connect);
-server.on('listening',function(){
-    console.log('Socket server is running at'+4000);
+
+// server.on('listening',function(){
+//     console.log('Socket server is running at '+4000);
+// });
+
+server.listen(socketPort,()=>{
+  console.log('Socket server is running at '+ socketPort);
 });
-server.listen(4000);

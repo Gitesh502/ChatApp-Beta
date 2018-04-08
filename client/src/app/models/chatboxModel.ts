@@ -6,6 +6,9 @@ export class ChatBoxModel {
     public user: object;
     public message: string;
     public messages: MessagesModel;
+    public isGroup: Boolean;
+    public sentTo: string;
+    public sentBy: string;
 }
 
 export class Conversations {
@@ -13,6 +16,8 @@ export class Conversations {
     public message: String;
     public recipient: String;
     public sender: String;
+    public sentTo: String;
+    public sentBy:String;
 }
 
 export class MessagesModel {
@@ -21,10 +26,11 @@ export class MessagesModel {
         this.isDelete = false;
         this.userIds = new Array<String>();
     }
+    public chatId: String;
     public conversation: Array<Conversations>;
     public isDelete: Boolean;
     public isGroup: Boolean;
-    public updated_at: Date;
+    public updatedAt: Date;
     public userIds: Array<String>;
     public _id: String;
 }

@@ -38,7 +38,15 @@ export class SocketService {
   friendRequestAccepted(id) {
     this.socket.emit('request-accepted', id);
   }
-
+  postComment(id) {
+    this.socket.emit('post-comment', id);
+  }
+  createRoom(room) {
+    this.socket.emit('new-room', room);
+  }
+  joinRoom(roomId) {
+    this.socket.emit('join-room', roomId);
+  }
 
 
 
@@ -66,5 +74,21 @@ export class SocketService {
       self.socket.on('online-users', (item: any) => observer.next(item));
     });
   }
+
+  newPost(): Observable<any> {
+    const self = this;
+    return Observable.create(observer => {
+      self.socket.on('new-post', (item: any) => observer.next(item));
+    });
+  }
+
+  newRoom(): Observable<any> {
+    const self = this;
+    return Observable.create(observer => {
+      self.socket.on('new-room', (item: any) => observer.next(item));
+    });
+  }
+
+
 
 }

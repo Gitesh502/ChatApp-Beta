@@ -13,20 +13,34 @@ router.get('/getMessages', passport.authenticate('jwt', {
 	session: false,
 }), chatController.getMessages);
 
-router.post('/save', passport.authenticate('jwt', {
-	session: false
-}), chatController.save);
-
 router.get('/getChatId', passport.authenticate('jwt', {
 	session: false
-}), chatController.getChatByUserIds);
+}), chatController.getChatId);
 
 router.get("/getMessengers", passport.authenticate('jwt', {
 	session: false
 }),chatController.getMessengers);
 
+router.get("/getGroups", passport.authenticate('jwt', {
+	session: false
+}),chatController.getGroups);
 
 
+
+
+
+
+router.post('/save', passport.authenticate('jwt', {
+	session: false
+}), chatController.save);
+
+router.post('/createGroup', passport.authenticate('jwt', {
+	session: false
+}), chatController.createGroup);
+
+router.post('/createChat',passport.authenticate('jwt',{
+	session:false
+}),chatController.createChat)
 
 
 module.exports = router;

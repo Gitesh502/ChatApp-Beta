@@ -62,8 +62,6 @@ export class ChatboxComponent implements OnInit {
     private socketSrvice: SocketService,
     @Inject(APP_CONFIG) private config: IAppConfig
   ) {
-    // this.chatbox = new ChatBoxModel();
-    // this.Messages = new MessagesModel();
   }
 
   ngOnInit(): void {
@@ -73,16 +71,6 @@ export class ChatboxComponent implements OnInit {
      * see method defination for moe info
      */
     _this.getMessages();
-    /**
-     * Its a function for getting new message when other use sends an message
-     * from socket io calling this method
-     */
-    // _this.chatService.newMessage()
-    //   .subscribe(data => {
-    //     _this.chatShared.pushMessage(data.text.message);
-    //     //_this.Messages.conversation.push(data.text.message);
-    //   }
-    //   );
   }
 
   getBoxStyle(index: number): number {
@@ -95,45 +83,39 @@ export class ChatboxComponent implements OnInit {
   }
 
   closeChatBox(userIndex) {
-    // tslint:disable-next-line:prefer-const
-    let _this = this;
+    const _this = this;
     _this.chatClosed.emit(userIndex);
   }
 
   sendMessage() {
     const _this = this;
     const message = {
+      chatId: this.chatbox.key,
       message: _this.chatbox.message,
       sender: _this.config.loggedUserId,
-      recipient: _this.chatbox.key,
+      recipient: _this.chatbox.sentTo,
+      isGroup: _this.chatbox.isGroup,
       createdOn: new Date().toISOString()
     };
     const reqMessage = {
       message: message
     };
-    _this.socketSrvice.sendMessage(reqMessage);
-    _this.chatbox.message = '';
-    _this.chatShared.pushMessage(reqMessage.message);
-    const messages = _this.chatShared.getMessages();
-    if (_.contains(messages.userIds, _this.chatbox.key)) {
+    _this.chatService.saveMessage(message)
+      .subscribe(data => {
+        if (data != null && data.success) {
+          _this.socketSrvice.sendMessage(data.msgToSend);
+          _this.chatbox.message = '';
+          _this.chatShared.pushMessage(data.msgToSend.message);
+          const messages = _this.chatShared.getMessages();
+            if (_.contains(messages.userIds, _this.chatbox.key)) {
               _this.chatbox.messages = messages;
-         }
-    // _this.chatService.saveMessage(message)
-    //   .subscribe(data => {
-    //     if (data != null && data.success) {
-    //       _this.socketSrvice.sendMessage(data.msgToSend);
-    //       _this.chatbox.message = '';
-    //       _this.chatShared.pushMessage(data.msgToSend.message);
-    //       const messages = _this.chatShared.getMessages();
-    //       if (_.contains(messages.userIds, _this.chatbox.key)) {
-    //         _this.chatbox.messages = messages;
-    //       }
-    //     } else {
-    //       console.log(data);
-    //     }
-    //   },
-    //   err => {
-    //   });
+            }
+        } else {
+          console.log(data);
+        }
+      },
+        err => {
+        });
   }
   /**
    * @returns void
@@ -143,17 +125,15 @@ export class ChatboxComponent implements OnInit {
     const _this = this;
     _this.chatService.getMessages(_this.chatbox.key)
       .subscribe(data => {
-        console.log(data);
         if (data != null && data.response != null && data.response.length > 0) {
           _this.chatShared.initMessages(data.response[0]);
         }
         const messages = _this.chatShared.getMessages();
-        if (_.contains(messages.userIds, _this.chatbox.key)) {
+        if(messages.chatId === _this.chatbox.key) {
           _this.chatbox.messages = messages;
         }
-        // console.log(_this.Messages);
       },
-      err => {
-      });
+        err => {
+        });
   }
 }

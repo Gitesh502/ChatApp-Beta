@@ -1,51 +1,55 @@
-.post-comments{
+.post-comments {
   font-size: 12px;
 }
 
-.post-comments  .commentuser-image{
+.post-comments .commentuser-image {
   width: 30px !important;
-  height:30px !important;
+  height: 30px !important;
 }
 
-.post-comments  .comment-text{
+.post-comments .comment-text {
   background-color: #e9ebef;
-      margin-left: 40px;
-      border-radius: 20px;
-      padding: 10px;
+  margin-left: 40px;
+  border-radius: 20px;
+  padding: 10px;
 }
 
-
-
-.comment-text-box img{
+.comment-text-box img {
   width: 30px !important;
-  height:30px !important;
+  height: 30px !important;
 }
 
-.comment-text-box .comment-div{
-    margin-left: 40px;
+.comment-text-box .comment-div {
+  margin-left: 40px;
 }
 
-.comment-text-box .comment-div > .comment-box{
+.comment-text-box .comment-div > .comment-box {
   border-radius: 20px;
 }
 
-.post-comments > .stats{
-  margin-left:50px;
+.post-comments > .stats {
+  margin-left: 50px;
 }
 
-.sub-comments{
+.sub-comments {
   margin-bottom: 50px;
 }
 
-.sub-comments input{
-border-radius: 20px;
-width: 70%;
-    float: right;
-
+.sub-comments input {
+  border-radius: 5px;
+  width: 88%;
+  float: right;
 }
 
-.sub-comments img{
+.sub-comments img {
   height: 30px;
-width: 30px;
-margin-left:15px;
+  width: 30px;
+  margin-left: 200px;
+}
+
+.tagContainer {
+  padding: 5px;
+  background: aliceblue;
+  border: deepskyblue 1px solid;
+  border-radius: 5px;
 }

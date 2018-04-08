@@ -84,9 +84,7 @@ exports.register = function (req, res) {
 			response: errors
 		});
 	} else {
-
 		if (!checkUser(req.body.email)) {
-
 			let newuser = new User({
 				firstName: req.body.firstName,
 				surName: req.body.surName,
@@ -155,7 +153,6 @@ exports.confirmRegistration = function (req, res) {
 				tagline: tagline
 			});
 		} else if (user) {
-			console.log("checked email")
 			if (user.isEmailConfirmed) {
 				var tagline = "Your email had  already confirmed ! Please login <a href='" + config.clientUrl + "Welcome' >here</a>";
 				res.render('pages/notify', {

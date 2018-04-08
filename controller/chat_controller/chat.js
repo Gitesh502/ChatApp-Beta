@@ -14,12 +14,10 @@ var mongoose = require('mongoose');
  * if there is no record than will save to new reocrd and returns the new message that saved
  */
 exports.save = function (req, res) {
-	var query = {
-		$and: [{
-			userIds: req.body.to
-		}, {
-			userIds: req.user._id
-		}]
+	var query = {};
+	var request = req.body;
+	query = {
+		chatId: request.chatId
 	};
 	/**
 	 * @param  {query is just a filter condition for where condition} query
@@ -30,16 +28,19 @@ exports.save = function (req, res) {
 	chatService.getOne(query, null, {}, (err, chat) => {
 		if (err) throw err;
 		if (!chat) {
+
 			let newChat = new Chat({
 				conversation: [{
 					message: req.body.message,
-					sender: req.user._id,
-					recipient: req.body.to
+					sentBy: req.user._id,
+					sentTo: req.body.recipient
 				}],
 				userIds: [
-					req.body.to, req.user._id
+					req.body.recipient, req.user._id
 				],
-				updated_at: new Date()
+				updatedAt: new Date().toISOString(),
+				createdBy: req.user._id,
+				isGroup: request.isGroup
 			});
 			/**
 			 * @param {newChat is new chat object that is to be saved to database} newChat
@@ -53,14 +54,15 @@ exports.save = function (req, res) {
 						error: err
 					});
 				} else {
-					var newMessage = _.orderBy(newChat.conversation, 'createdOn', 'desc');
+					var newMessage = _.last(newChat.conversation.toObject());
 					res.json({
 						success: true,
 						msg: "Message saved to database",
 						response: newChat,
 						msgToSend: {
-							chatId: newChat._id,
-							message: newMessage[0]
+							chatId: newChat.chatId,
+							message: newMessage,
+							isGroup: newChat.isGroup
 						}
 					});
 				}
@@ -72,16 +74,17 @@ exports.save = function (req, res) {
 			var query = {
 				_id: chat._id
 			};
-			chatService.getOne(query, null, {}, (err, chat) => {
+			chatService.getOne(query, null, {}, (err, prevchat) => {
 				if (err) throw err;
-				if (chat) {
-					chat.conversation.push({
+				if (prevchat) {
+					prevchat.conversation.push({
 						message: req.body.message,
-						sender: req.user._id,
-						recipient: req.body.to
+						sentBy: req.user._id,
+						sentTo: req.body.recipient
 					});
-					chat.updated_at = new Date();
-					chatService.save(chat, (err, newChat, numAffected) => {
+					prevchat.updatedAt = new Date().toISOString();
+					prevchat.createdBy = req.user._id;
+					chatService.save(prevchat, (err, newChat, numAffected) => {
 						if (err) {
 							res.json({
 								success: false,
@@ -89,14 +92,15 @@ exports.save = function (req, res) {
 								error: err
 							});
 						} else {
-							var newMessage = _.orderBy(newChat.conversation, 'createdOn', 'desc');
+							var newMessage = _.last(newChat.conversation.toObject());
 							res.json({
 								success: true,
 								msg: "Message saved to database",
 								response: newChat,
 								msgToSend: {
-									chatId: newChat._id,
-									message: newMessage[0]
+									chatId: newChat.chatId,
+									message: newMessage,
+									isGroup: newChat.isGroup
 								}
 							});
 						}
@@ -113,13 +117,14 @@ exports.save = function (req, res) {
  */
 exports.getMessages = function (req, res) {
 	var query = {
-		$and: [{
-			userIds: req.query.toId
-		}, {
-			userIds: req.user._id
-		}]
+		chatId: req.query.chatId
 	};
-	chatService.get(query, null, null, null, (err, messages) => {
+
+	var populate = {
+		path: 'conversation.sender',
+		select: 'firstName surName _id'
+	};
+	chatService.get(query, populate, null, null, (err, messages) => {
 		if (err) throw err;
 		else res.json({
 			success: true,
@@ -133,17 +138,13 @@ exports.getMessages = function (req, res) {
  * if there is one than updating and returning the chatid to user
  * if not ,creating a new record to database and returning newly created chatid
  */
-exports.getChatByUserIds = function (req, res) {
-	var query = {
-		$and: [{
-			userIds: req.query.toId
-		}, {
-			userIds: req.user._id
-		}]
+exports.getChatId = function (req, res) {
+	var params = {
+		toId: req.query.toId,
+		fromId: req.user._id
 	};
-	chatService.get(query, null, null, null, (err, chat) => {
-		if (err) throw err;
-		if (!chat) {
+	exports.getChatByUserIds(params, (isExisits, chat) => {
+		if (!isExisits) {
 			let newChat = new Chat({
 				conversation: [],
 				userIds: [
@@ -165,7 +166,7 @@ exports.getChatByUserIds = function (req, res) {
 					});
 				}
 			});
-		} else if (chat) {
+		} else {
 			res.json({
 				success: true,
 				msg: "",
@@ -175,6 +176,28 @@ exports.getChatByUserIds = function (req, res) {
 	});
 }
 
+
+
+exports.getChatByUserIds = function (params, callback) {
+	var query = {
+		$and: [{
+			userIds: params.toId
+		}, {
+			userIds: params.fromId
+		}]
+	};
+	chatService.getOne(query, null, null, (err, chat) => {
+		if (err) throw err;
+		if (!chat) {
+			callback(false, null);
+
+		} else if (chat) {
+			callback(true, chat);
+		} else {
+			callback(false, null);
+		}
+	});
+}
 
 /**
  * Fecthes all chats and users with whome logged users had a chat
@@ -220,3 +243,108 @@ exports.getMessengers = function (req, res) {
 }
 
 
+exports.createGroup = function (req, res) {
+	var requestData = req.body;
+	var userIds = req.body.userIds;
+	userIds.push(req.user._id);
+	let newChat = new Chat({
+		conversation: [],
+		userIds: userIds,
+		isGroup: true,
+		groupName: req.body.groupName,
+		updatedAt: new Date().toISOString(),
+		chatId: mongoose.Types.ObjectId(),
+		createdBy: req.user._id
+	});
+	chatService.save(newChat, (err, newChat, numAffected) => {
+		if (err) {
+			res.json({
+				success: false,
+				msg: "Group could not be created",
+				error: err
+			});
+		} else {
+			res.json({
+				success: true,
+				msg: "Group created sucessfully",
+				response: newChat
+			});
+		}
+	});
+}
+
+
+exports.getGroups = function (req, res) {
+	var query = {
+
+		$and: [{
+				isGroup: true
+			},
+			{
+				$or: [{
+					createdBy: req.user._id
+				}, {
+					userIds: req.user._id
+				}]
+			}
+		]
+	};
+	chatService.get(query, null, null, null, (err, groups) => {
+		if (err) {
+			throw err;
+		}
+
+		res.json({
+			success: true,
+			msg: "Success",
+			response: groups
+		});
+	});
+}
+
+exports.createChat = function (req, res) {
+	var requestData = req.body;
+	var user = req.user;
+	var userIds = [user._id];
+	userIds.push(requestData.sentTo);
+	var params = {
+		toId: requestData.sentTo,
+		fromId: user._id
+	};
+	exports.getChatByUserIds(params, (isExisits, chat) => {
+		if (!isExisits) {
+			let newChat = new Chat({
+				chatId: mongoose.Types.ObjectId(),
+				conversation: [],
+				isDelete: false,
+				createdBy: user._id,
+				updatedAt: new Date().toISOString(),
+				userIds: userIds,
+			});
+
+			chatService.save(newChat, (err, newChat, numAffected) => {
+				if (err) {
+					res.json({
+						success: false,
+						msg: "chat could not be created",
+						error: err
+					});
+				} else {
+					res.json({
+						success: true,
+						msg: "chat created sucessfully",
+						response: newChat.chatId
+					});
+				}
+			});
+		} else {
+			res.json({
+				success: true,
+				msg: "chat created sucessfully",
+				response: chat.chatId
+			});
+		}
+	});
+
+
+}

@@ -26,7 +26,7 @@ module.exports = function (passport) {
             }
         }];
 
-        userService.getOneById(jwt_payload._doc._id,query,{"isOnline":1}, (err, user) => {
+        userService.getOneById(jwt_payload._doc._id,query,null, (err, user) => {
             if (err) {
                 return done(err, false);
             }

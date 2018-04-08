@@ -2,7 +2,7 @@
   <hr />
   <div class="comment-text-box padding-30">
     <div class="pull-left image">
-      <img src="{{config.apiEndpoint}}{{p.PostedBy.profileImages[0].imagePath}}/{{p.PostedBy.profileImages[0].iconName}}" class="img-circle avatar" alt="user profile image">
+      <img src="{{config.apiEndpoint}}{{sharedService.getLocalProfile().profileImages[0].imagePath}}/{{sharedService.getLocalProfile().profileImages[0].iconName}}" class="img-circle avatar" alt="user profile image">
     </div>
     <div class="comment-div">
       <input #commentbox type="text" (keydown.enter)="postComment(commentbox,p)" placeholder="Write a comment" class="comment-box form-control" />
@@ -11,10 +11,10 @@
   <ng-container *ngFor="let comment of comments; let i = index">
     <div class="post-comments padding-30">
       <div class="pull-left image">
-        <img src="{{config.apiEndpoint}}{{p.PostedBy.profileImages[0].imagePath}}/{{p.PostedBy.profileImages[0].iconName}}" class="img-circle avatar commentuser-image" alt="user profile image">
+        <img src="{{config.apiEndpoint}}{{comment.author.profileImages[0].imagePath}}/{{comment.author.profileImages[0].icon_45X45}}" class="img-circle avatar commentuser-image" alt="">
       </div>
       <p class="comment-text">
-        <strong>Test User</strong> {{comment.comment}}
+        <strong>{{comment.author.firstName}} {{comment.author.surName}}</strong><span>&nbsp;</span> <span [innerHTML]="comment.comment"></span> 
       </p>
       <div class="stats padding-left-50 pull-left">
         <button class="btn btn-default btn-xs stat-item">
@@ -27,16 +27,17 @@
           <i class="fa fa-reply icon"></i> 5
         </button>
       </div>
-      <ng-container *ngIf="isShowCommentBox && isShowCommentBox[i]?.display==true">
-        <div class="sub-comments">
-          <div class="pull-left image">
-            <img src="{{config.apiEndpoint}}{{p.PostedBy.profileImages[0].imagePath}}/{{p.PostedBy.profileImages[0].iconName}}" class="img-circle avatar" alt="user profile image">
-          </div>
-          <div class="">
-            <input type="text" class="form-control" placeholder="Write a comment" />
-          </div>
-        </div>
-      </ng-container>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="isShowCommentBox && isShowCommentBox[indexClicked]?.display==true">
+    <div class="sub-comments">
+      <div class="pull-left image">
+        <img src="{{config.apiEndpoint}}{{sharedService.getLocalProfile().profileImages[0].imagePath}}/{{sharedService.getLocalProfile().profileImages[0].iconName}}" class="img-circle avatar" alt="user profile image">
+      </div>
+      <div class="" style="display:flex">
+        <span class="tagContainer">{{isShowCommentBox[indexClicked]?.parentComment.author.firstName}}</span>
+        <input #childcommentbox type="text" (keydown.enter)="postChildComment(childcommentbox,isShowCommentBox[indexClicked]?.parentComment,p)" class="form-control" placeholder="Write a comment" />
+      </div>
     </div>
   </ng-container>
 

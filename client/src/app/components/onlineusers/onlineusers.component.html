@@ -2,33 +2,66 @@
 
   <div class="navbar-header">
     <button type="button" class="navbar-toggle" data-toggle="collapse" (click)="isOnlineUsersDisplay=!isOnlineUsersDisplay" [attr.aria-expanded]="!isOnlineUsersDisplay"
-    aria-controls="navbarContent">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
+      aria-controls="navbarContent">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
   </div>
   <div class="collapse navbar-collapse" [ngbCollapse]="!isOnlineUsersDisplay">
     <ul class="nav navbar-nav user">
-      <li *ngFor="let user of shared.getOnlineUsers()">
-        <!-- <ng-container *showItBootstrap="['md','lg']">
-        <a (click)="openChat(user)" class="ol-user">
-            <img class="pull-left img-circle" [(src)]="config.apiEndpoint+user.img"  [alt]="user?.firstName" />
-           <div class="ol-user-name" style="padding-top:13px;padding-left:50px;"> {{user?.firstName}} {{user?.surName}}</div>
-           <div *ngIf="user?.isOnline=='Y'" class="online-div pull-right padding-right-15">
-              <span class="online"></span>
-           </div>
-          </a>
-        </ng-container> -->
-        <ng-container *showItBootstrap="['lg','md','xs','sm']">
-            <a [routerLink]="['/Messenger']"  [queryParams]="{ user: user.id }" class="ol-user" [style.background-color]="getStyle(user?.isOnline)">
-                <img class="pull-left img-circle" [(src)]="config.apiEndpoint+user.img"  [alt]="user?.firstName" />
-               <div class="ol-user-name" style="padding-top:13px;padding-left:50px;"> {{user?.firstName}} {{user?.surName}}</div>
-              </a>
-            </ng-container>
+      <li>
+        <input type="search" class="form-control" placeholder="Search" />
       </li>
+      <li *ngFor="let user of shared.getOnlineUsers()">
+        <ng-container *showItBootstrap="['md','lg']">
+          <a (click)="openPrivateChat(user)" class="ol-user">
+            <img class="pull-left img-circle" [(src)]="config.apiEndpoint+user.img" [alt]="user?.firstName" />
+            <div class="ol-user-name" style="padding-top:13px;padding-left:50px;"> {{user?.firstName}} {{user?.surName}}</div>
+            <div *ngIf="user?.isOnline=='Y'" class="online-div pull-right padding-right-15">
+              <span class="online"></span>
+            </div>
+          </a>
+        </ng-container>
+        <ng-container *showItBootstrap="['xs','sm']">
+          <a [routerLink]="['/Messenger']" [queryParams]="{ user: user.id }" class="ol-user" [style.background-color]="getStyle(user?.isOnline)">
+            <img class="pull-left img-circle" [(src)]="config.apiEndpoint+user.img" [alt]="user?.firstName" />
+            <div class="ol-user-name" style="padding-top:13px;padding-left:50px;"> {{user?.firstName}} {{user?.surName}}</div>
+          </a>
+        </ng-container>
+      </li>
+      <ng-container *ngIf="shared.groupChats.length>0">
+        <li>
+          <small class="padding-left-15"><strong>GROUPS</strong></small>
+        </li>
+        <li *ngFor="let gChat of shared.groupChats">
+          <ng-container *showItBootstrap="['md','lg']">
+            <a (click)="openGroupChat(gChat)" class="ol-user">
+              <!-- <img class="pull-left img-circle" [(src)]="config.apiEndpoint+user.img" [alt]="user?.firstName" /> -->
+              <div class="ol-user-name" style="padding-top:13px;padding-left:50px;"> {{gChat?.name}}</div>
+            </a>
+          </ng-container>
+        </li>
+      </ng-container>
     </ul>
-  </div>
 
+  </div>
+  <div class="online-toolbox">
+    <div class="toolbox-item">
+      <a title="Settings">
+        <i class="fa fa-cogs" aria-hidden="true"></i>
+      </a>
+    </div>
+    <div class="toolbox-item">
+      <a title="Group Message" (click)="openGroupPopup()">
+        <i class="fa fa-users" aria-hidden="true"></i>
+      </a>
+    </div>
+    <div class="toolbox-item">
+      <a title="New Message">
+        <i class="fa fa-commenting" aria-hidden="true"></i>
+      </a>
+    </div>
+  </div>
 </nav>
